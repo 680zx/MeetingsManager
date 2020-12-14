@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PersonalMeetingsManager
 {
-    class User
+    class Schedule
     {
         private List<Meeting> _meetings = new List<Meeting>();
 
