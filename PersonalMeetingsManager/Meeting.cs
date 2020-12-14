@@ -8,7 +8,6 @@ namespace PersonalMeetingsManager
     {
         public DateTime startDateTime { get; set; }
         public DateTime endDateTime { get; set; }
-
-
+        public DateTime reminderTime { get; set; }
     }
 }
