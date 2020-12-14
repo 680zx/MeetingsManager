@@ -4,7 +4,11 @@ using System.Text;
 
 namespace PersonalMeetingsManager
 {
-    class Meeting
+    public class Meeting
     {
+        public DateTime startDateTime { get; set; }
+        public DateTime endDateTime { get; set; }
+
+
     }
 }
