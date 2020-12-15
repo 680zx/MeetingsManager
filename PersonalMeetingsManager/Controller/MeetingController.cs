@@ -8,9 +8,12 @@ namespace PersonalMeetingsManager
     {
         private List<Meeting> _meetings = new List<Meeting>();
 
-        public void AddMeeting()
+        public void AddMeeting(Meeting newMeetingDateTime)
         {
-            throw new NotImplementedException();
+            if (newMeetingDateTime == null)
+                throw new ArgumentNullException();
+
+            _meetings.Add(newMeetingDateTime);
         }
 
         public void RemoveMeeting()

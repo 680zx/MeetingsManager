@@ -1,0 +1,13 @@
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\bin\Debug\netcoreapp3.1\PersonalMeetingsManager.exe
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\bin\Debug\netcoreapp3.1\PersonalMeetingsManager.deps.json
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\bin\Debug\netcoreapp3.1\PersonalMeetingsManager.runtimeconfig.json
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\bin\Debug\netcoreapp3.1\PersonalMeetingsManager.runtimeconfig.dev.json
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\bin\Debug\netcoreapp3.1\PersonalMeetingsManager.dll
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\bin\Debug\netcoreapp3.1\PersonalMeetingsManager.pdb
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\obj\Debug\netcoreapp3.1\PersonalMeetingsManager.csprojAssemblyReference.cache
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\obj\Debug\netcoreapp3.1\PersonalMeetingsManager.AssemblyInfoInputs.cache
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\obj\Debug\netcoreapp3.1\PersonalMeetingsManager.AssemblyInfo.cs
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\obj\Debug\netcoreapp3.1\PersonalMeetingsManager.csproj.CoreCompileInputs.cache
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\obj\Debug\netcoreapp3.1\PersonalMeetingsManager.dll
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\obj\Debug\netcoreapp3.1\PersonalMeetingsManager.pdb
+C:\Users\tvrbofx\source\repos\PersonalMeetingsManager\PersonalMeetingsManager\obj\Debug\netcoreapp3.1\PersonalMeetingsManager.genruntimeconfig.cache
