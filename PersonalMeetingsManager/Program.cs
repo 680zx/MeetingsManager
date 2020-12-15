@@ -33,6 +33,11 @@ namespace PersonalMeetingsManager
             }
         }
         //12.12.2012 12:50
+
+        /// <summary>
+        /// Запрашивает у пользователя дату и время.
+        /// </summary>
+        /// <returns>Возвращает дату и время начала/окончания/напоминания встречи.</returns>
         private static DateTime readDataTime()
         {
             string input;
@@ -47,6 +52,10 @@ namespace PersonalMeetingsManager
             return dateTime;
         }
 
+        /// <summary>
+        /// Выводит список всех встреч пользователя.
+        /// </summary>
+        /// <param name="meetingController"></param>
         private static void showMeetings(MeetingController meetingController)
         {
             if (meetingController == null)
@@ -64,7 +73,6 @@ namespace PersonalMeetingsManager
                     Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime}");
                     Console.WriteLine($"Время напоминания:\t{meeting.ReminderDateTime}");
                     Console.WriteLine();
-
                     counter++;
                 }
             }
