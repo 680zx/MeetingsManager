@@ -4,16 +4,21 @@ using System.Text;
 
 namespace PersonalMeetingsManager
 {
-    class MeetingController
+    public class MeetingController
     {
         private List<Meeting> _meetings = new List<Meeting>();
+        public List<Meeting> Meetings { get => _meetings; }
 
-        public void AddMeeting(Meeting newMeetingDateTime)
+        public MeetingController()
         {
-            if (newMeetingDateTime == null)
-                throw new ArgumentNullException();
+        }
 
-            _meetings.Add(newMeetingDateTime);
+        public void AddMeeting(Meeting newMeeting)
+        {
+            if (newMeeting == null)
+                throw new ArgumentNullException("Передан пустой аргумент", nameof(newMeeting));
+
+            _meetings.Add(newMeeting);
         }
 
         public void RemoveMeeting()
@@ -31,10 +36,6 @@ namespace PersonalMeetingsManager
             throw new NotImplementedException();
         }
 
-        public void ShowMeetings()
-        {
-            throw new NotImplementedException();
-        }
 
         public void ExportMeeting()
         {

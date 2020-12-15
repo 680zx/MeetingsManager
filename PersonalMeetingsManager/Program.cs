@@ -28,9 +28,10 @@ namespace PersonalMeetingsManager
                 var reminderTime = readDataTime();
 
                 meetingController.AddMeeting(new Meeting(startTime, endTime, reminderTime));
+                showMeetings(meetingController);
             }
         }
-        
+        //12.12.2012 12:50
         private static DateTime readDataTime()
         {
             string input;
@@ -43,6 +44,29 @@ namespace PersonalMeetingsManager
             while (!DateTime.TryParseExact(input, "dd.MM.yyyy hh:mm", null, DateTimeStyles.None, out dateTime));
 
             return dateTime;
+        }
+
+        private static void showMeetings(MeetingController meetingController)
+        {
+            if (meetingController == null)
+                throw new ArgumentNullException("Передан пустой аргумент", nameof(meetingController));
+
+            if (meetingController.Meetings.Count == 0)
+                Console.WriteLine("Сейчас в Вашем расписании нет ни одной встречи.");
+            else
+            {
+                int counter = 1;
+                foreach (Meeting meeting in meetingController.Meetings)
+                {
+                    Console.WriteLine($"Встреча №{counter}");
+                    Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime}");
+                    Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime}");
+                    Console.WriteLine($"Время напоминания:\t{meeting.ReminderTime}");
+                    Console.WriteLine();
+
+                    counter++;
+                }
+            }
         }
     }
 }

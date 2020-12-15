@@ -10,9 +10,9 @@ namespace PersonalMeetingsManager
         private DateTime _endDateTime;
         private DateTime _reminderDateTime;
 
-        public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
-        public DateTime ReminderTime { get; set; }
+        public DateTime StartDateTime { get => _startDateTime; }
+        public DateTime EndDateTime { get => _endDateTime; }
+        public DateTime ReminderTime { get => _reminderDateTime; }
 
         public Meeting(DateTime startDateTime, DateTime endDateTime, DateTime reminderTime)
         {
