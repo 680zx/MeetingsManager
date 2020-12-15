@@ -21,9 +21,13 @@ namespace PersonalMeetingsManager
             _meetings.Add(newMeeting);
         }
 
-        public void RemoveMeeting()
+        public void RemoveMeeting(int index)
         {
-            throw new NotImplementedException();
+            index--;
+            if (index >= _meetings.Count || index < 0)
+                throw new ArgumentOutOfRangeException("Переданный индекс находится вне границ списка", nameof(index));
+
+            _meetings.RemoveAt(index);
         }
 
         public void EditMeeting()

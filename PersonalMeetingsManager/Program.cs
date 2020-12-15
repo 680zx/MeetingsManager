@@ -29,6 +29,7 @@ namespace PersonalMeetingsManager
 
                 meetingController.AddMeeting(new Meeting(startTime, endTime, reminderTime));
                 showMeetings(meetingController);
+                meetingController.RemoveMeeting(0);
             }
         }
         //12.12.2012 12:50
