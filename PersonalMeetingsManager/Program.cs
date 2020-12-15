@@ -11,7 +11,7 @@ namespace PersonalMeetingsManager
 
             Console.WriteLine(meeting.StartDateTime);
             Console.WriteLine(meeting.EndDateTime);
-            Console.WriteLine(meeting.ReminderTime);
+            Console.WriteLine(meeting.ReminderDateTime);
 
             MeetingController meetingController = new MeetingController();
 
@@ -62,7 +62,7 @@ namespace PersonalMeetingsManager
                     Console.WriteLine($"Встреча №{counter}");
                     Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime}");
                     Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime}");
-                    Console.WriteLine($"Время напоминания:\t{meeting.ReminderTime}");
+                    Console.WriteLine($"Время напоминания:\t{meeting.ReminderDateTime}");
                     Console.WriteLine();
 
                     counter++;

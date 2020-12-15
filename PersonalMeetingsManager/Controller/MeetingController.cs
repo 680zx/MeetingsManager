@@ -15,9 +15,6 @@ namespace PersonalMeetingsManager
 
         public void AddMeeting(Meeting newMeeting)
         {
-            if (newMeeting == null)
-                throw new ArgumentNullException("Передан пустой аргумент", nameof(newMeeting));
-
             _meetings.Add(newMeeting);
         }
 
@@ -30,14 +27,23 @@ namespace PersonalMeetingsManager
             _meetings.RemoveAt(index);
         }
 
-        public void EditMeeting()
+        public void EditMeeting(int index, Meeting changedMeeting)
         {
-            throw new NotImplementedException();
+            index--;
+            if (index >= _meetings.Count || index < 0)
+                throw new ArgumentOutOfRangeException("Переданный индекс находится вне границ списка", nameof(index));
+
+            _meetings[index] = changedMeeting;
         }
 
-        public void CreateReminder()
+        public void ChangeReminderTime(int index, DateTime dateTime)
         {
-            throw new NotImplementedException();
+            index--;
+            if (index >= _meetings.Count || index < 0)
+                throw new ArgumentOutOfRangeException("Переданный индекс находится вне границ списка", nameof(index));
+
+            var currentMeeting = _meetings[index];
+            currentMeeting.ReminderDateTime = dateTime;
         }
 
 

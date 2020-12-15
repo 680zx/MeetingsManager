@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PersonalMeetingsManager
 {
-    public class Meeting
+    public struct Meeting
     {
         private DateTime _startDateTime;
         private DateTime _endDateTime;
@@ -12,7 +12,14 @@ namespace PersonalMeetingsManager
 
         public DateTime StartDateTime { get => _startDateTime; }
         public DateTime EndDateTime { get => _endDateTime; }
-        public DateTime ReminderTime { get => _reminderDateTime; }
+        public DateTime ReminderDateTime 
+        { 
+            get => _reminderDateTime; 
+            set
+            {
+                _reminderDateTime = value;
+            }
+        }
 
         public Meeting(DateTime startDateTime, DateTime endDateTime, DateTime reminderTime)
         {
@@ -20,5 +27,6 @@ namespace PersonalMeetingsManager
             _endDateTime = endDateTime;
             _reminderDateTime = reminderTime;
         }
+
     }
 }
