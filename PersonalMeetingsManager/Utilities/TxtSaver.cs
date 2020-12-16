@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.IO;
 
 namespace PersonalMeetingsManager.Utilities
 {
@@ -17,12 +18,12 @@ namespace PersonalMeetingsManager.Utilities
             var pathString = "MyMeetings";
             var fileName = "MyMeetings.txt";
 
-            if (!System.IO.Directory.Exists(pathString))
-                System.IO.Directory.CreateDirectory(pathString);
+            if (!Directory.Exists(pathString))
+                Directory.CreateDirectory(pathString);
 
-            pathString = System.IO.Path.Combine(pathString, fileName);
+            pathString = Path.Combine(pathString, fileName);
 
-            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(pathString))
+            using (StreamWriter sw = new StreamWriter(pathString))
             {
                 if (items.Count == 0)
                 {

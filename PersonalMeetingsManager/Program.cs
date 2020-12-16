@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using PersonalMeetingsManager.Utilities;
+using System.Collections.Generic;
 
 namespace PersonalMeetingsManager
 {
@@ -21,16 +22,16 @@ namespace PersonalMeetingsManager
                 TxtSaver.Save(meetingController.Meetings);
                 Console.WriteLine("Вы хотели бы добавить новую встречу?");
                 Console.WriteLine("Введите дату и время начала предстоящей встречи (dd.MM.yyyy hh:mm):\n");
-                var startTime = readDataTime();
+                var startTime = readDateTime();
 
                 Console.WriteLine("Введите дату и время окончания предстоящей встречи (dd.MM.yyyy hh:mm):\n");
-                var endTime = readDataTime();
+                var endTime = readDateTime();
 
                 Console.WriteLine("Введите время за сколько вам нужно напомнить о предстоящей встрече (dd.MM.yyyy hh:mm):\n");
-                var reminderTime = readDataTime();
+                var reminderTime = readDateTime();
 
                 meetingController.AddMeeting(new Meeting(startTime, endTime, reminderTime));
-                showMeetings(meetingController);
+                showMeetings(meetingController.Meetings);
                 
                 //meetingController.RemoveMeeting(0);
             }
@@ -41,11 +42,12 @@ namespace PersonalMeetingsManager
         /// Запрашивает у пользователя дату и время.
         /// </summary>
         /// <returns>Возвращает дату и время начала/окончания/напоминания встречи.</returns>
-        private static DateTime readDataTime()
+        private static DateTime readDateTime()
         {
             string input;
             DateTime dateTime;
 
+            // TODO: добавить сообщение пользователю об ошибке, если неправильно введена дата.
             do
             {
                 input = Console.ReadLine();
@@ -56,20 +58,20 @@ namespace PersonalMeetingsManager
         }
 
         /// <summary>
-        /// Выводит список всех встреч пользователя.
+        /// Выводит список всех встреч пользователя <see cref="items">.
         /// </summary>
-        /// <param name="meetingController"></param>
-        private static void showMeetings(MeetingController meetingController)
+        /// <param name="items"></param>
+        private static void showMeetings(List<Meeting> items)
         {
-            if (meetingController == null)
-                throw new ArgumentNullException("Передан пустой аргумент", nameof(meetingController));
+            if (items == null)
+                throw new ArgumentNullException("Список встреч не может быть null.", nameof(items));
 
-            if (meetingController.Meetings.Count == 0)
+            if (items.Count == 0)
                 Console.WriteLine("Сейчас в Вашем расписании нет ни одной встречи.");
             else
             {
                 int counter = 1;
-                foreach (Meeting meeting in meetingController.Meetings)
+                foreach (Meeting meeting in items)
                 {
                     Console.WriteLine($"Встреча №{counter}");
                     Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime}");
