@@ -38,7 +38,7 @@ namespace PersonalMeetingsManager.Utilities
                         sw.WriteLine($"Встреча №{counter}");
                         sw.WriteLine($"Начало:\t\t\t{item.StartDateTime.ToString("t")}");
                         sw.WriteLine($"Окончание:\t\t{item.EndDateTime.ToString("t")}");
-                        sw.WriteLine($"Время напоминания:\t{item.ReminderTime.ToString("t")}");
+                        sw.WriteLine($"Время напоминания:\t{item.ReminderDateTime.ToString("t")}");
                         sw.WriteLine();
                         counter++;
                     }

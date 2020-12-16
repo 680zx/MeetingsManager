@@ -4,15 +4,30 @@ using System.Text;
 
 namespace PersonalMeetingsManager
 {
-    public struct Meeting
+    public class Meeting : ICloneable
     {
         private DateTime _startDateTime;
         private DateTime _endDateTime;
         private DateTime _reminderDateTime;
 
-        public DateTime StartDateTime { get => _startDateTime; }
-        public DateTime EndDateTime { get => _endDateTime; }
-        public DateTime ReminderTime 
+        public DateTime StartDateTime 
+        { 
+            get => _startDateTime;
+            set
+            {
+                _startDateTime = value;
+            }
+        }
+        public DateTime EndDateTime 
+        {
+            get => _endDateTime;
+            set
+            {
+                _endDateTime = value;
+            }
+        }
+    
+        public DateTime ReminderDateTime 
         { 
             get => _reminderDateTime; 
             set
@@ -21,7 +36,11 @@ namespace PersonalMeetingsManager
             }
         }
 
-        public Meeting(DateTime startDateTime, DateTime endDateTime, DateTime reminderTime)
+        public Meeting()
+        {
+        }
+
+        public Meeting(DateTime startDateTime, DateTime endDateTime, TimeSpan reminderTime)
         {
             if (startDateTime < DateTime.Now)
                 throw new ArgumentOutOfRangeException("Время встречи может быть установлено только на будущее.", nameof(startDateTime));
@@ -31,8 +50,17 @@ namespace PersonalMeetingsManager
 
             _startDateTime = startDateTime;
             _endDateTime = endDateTime;
-            _reminderDateTime = reminderTime;
+            _reminderDateTime = startDateTime.Subtract(reminderTime);
         }
 
+        public object Clone()
+        {
+            return new Meeting
+            {
+                _startDateTime = this._startDateTime,
+                _endDateTime = this._endDateTime,
+                _reminderDateTime = this._reminderDateTime
+            };
+        }
     }
 }

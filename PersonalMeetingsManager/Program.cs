@@ -36,43 +36,72 @@ namespace PersonalMeetingsManager
                         Console.Clear();
                         var newMeeting = enterMeeting("предстоящей");
                         meetingController.AddMeeting(newMeeting);
-                        printExitMessage("Добавление новой встречи");
+                        printExitMessage("Добавление новой встречи успешно выполнено.");
                         break;
+
                     case ConsoleKey.R:
                         Console.Clear();
                         var removeIndex = enterIndex("удалить");
                         meetingController.RemoveMeeting(removeIndex);
-                        printExitMessage("Удаление встречи");
+                        printExitMessage("Удаление встречи успешно выполнено.");
                         break;
+
                     case ConsoleKey.E:
                         // TODO: добавить проверку на наличие встреч в списке.
                         Console.Clear();
                         var editIndex = enterIndex("отредактировать");
                         var changedMeeting = enterMeeting("");
-                        meetingController.EditMeeting(editIndex, changedMeeting);
-                        printExitMessage("Редактирование встречи");
+                        try
+                        {
+                            meetingController.EditMeeting(editIndex, changedMeeting);
+                            printExitMessage("Редактирование встречи успешно выполнено.");
+                        }
+                        catch (ArgumentOutOfRangeException ex)
+                        {
+                            Console.WriteLine($"Ошибка: {ex.ParamName}");
+                            printExitMessage("Редактирование встречи не выполнено.");
+                        }
                         break;
+
                     case ConsoleKey.C:
-                        // TODO: исправить -> не изменяет дату и вермя напоминания.
                         Console.Clear();
                         var changeReminderIndex = enterIndex("изменить время напоминания");
                         var changedReminderTime = enterTime();
-                        meetingController.ChangeReminderTime(changeReminderIndex, changedReminderTime);
-                        printExitMessage("Измнение времени напоминания");
+                        try
+                        {
+                            meetingController.ChangeReminderTime(changeReminderIndex, changedReminderTime);
+                            printExitMessage("Изменение времени напоминания успешно выполнено.");
+                        }
+                        catch (ArgumentOutOfRangeException ex)
+                        {
+                            Console.WriteLine($"Ошибка: {ex.ParamName}");
+                            printExitMessage("Изменение времени напоминания не выполнено.");
+                        }
                         break;
+
                     case ConsoleKey.S:
                         Console.Clear();
                         // TODO: изменить способ вывода списка встреч в консоль -> добавить к номеру встречи её дату.
                         showMeetings(meetingController.Meetings);
-                        printExitMessage("Вывод списка на экран");
+                        printExitMessage("Вывод списка на экран успешно выполнен.");
                         break;
+
                     case ConsoleKey.P:
                         Console.Clear();
                         // TODO: изменить способ вывода списка встреч в консоль -> вывод встреч на определеннуюю дату, добавить к имени файла дату встречи, 
                         //       добавить в самое начало текстового файла дату.
-                        TxtSaver.Save(meetingController.Meetings);
-                        printExitMessage("Экспорт встреч в текстовый файл");
+                        try
+                        {
+                            TxtSaver.Save(meetingController.Meetings);
+                            printExitMessage("Экспорт встреч в текстовый файл успешно выполнен.");
+                        }
+                        catch (ArgumentNullException ex)
+                        {
+                            Console.WriteLine($"Ошибка: {ex.ParamName}");
+                            printExitMessage("Экспорт встреч в текстовый файл не выполнен.");
+                        }
                         break;
+
                     case ConsoleKey.H:
                         Console.Clear();
                         Console.WriteLine("Формат ввода даты и времени: (dd.MM.yyyy HH:mm),");
@@ -81,11 +110,13 @@ namespace PersonalMeetingsManager
                         Console.WriteLine("2012 года будет введена как 12.07.2012 08:05.");
                         Console.WriteLine("Текстовый файл со встречами за опреденный день");
                         Console.WriteLine("находится в директории Meetings проекта MyMeetings");
-                        printExitMessage("Вывод справки");
+                        printExitMessage("Вывод справки успешно выполнен");
                         break;
+
                     case ConsoleKey.Q:
                         Environment.Exit(0);
                         break;
+
                     default:
                         Console.WriteLine("\nНажата неизвестная клавиша, попробуйте снова."); 
                         Thread.Sleep(1000);
@@ -94,15 +125,15 @@ namespace PersonalMeetingsManager
                 Console.Clear();
             }
         }
-        //01.01.2021 23:50
+        //01.01.2021 08:50
 
         /// <summary>
         /// Выводит сообщение об успешном выполнении действии пользоватаеля.
         /// </summary>
         /// <param name="action">Тип действия.</param>
-        private static void printExitMessage(string action)
+        private static void printExitMessage(string message)
         {
-            Console.WriteLine($"\n{action} успешно выполнено.");
+            Console.WriteLine($"\n{message}");
             Console.WriteLine("Нажмите любую клавишу для возврата в главное меню.");
             Console.ReadKey();
         }
@@ -113,19 +144,20 @@ namespace PersonalMeetingsManager
         /// <returns>Возвращает новую встречу.</returns>
         private static Meeting enterMeeting(string value)
         {
-            while(true)
+            while (true)
+            {
                 try
                 {
                     var startDateTime = enterDateTime($"начала {value} встречи");
                     var endDateTime = enterDateTime($"окончания {value} встречи");
-                    var reminderTime = startDateTime.Subtract(enterTime());
+                    var reminderTime = enterTime();
                     return new Meeting(startDateTime, endDateTime, reminderTime);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
                     Console.WriteLine($"Ошибка: {ex.ParamName}\n");
                 }
-           
+            }
         }
 
         /// <summary>
@@ -214,7 +246,7 @@ namespace PersonalMeetingsManager
                     Console.WriteLine($"Встреча №{counter}");
                     Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime}");
                     Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime}");
-                    Console.WriteLine($"Время напоминания:\t{meeting.ReminderTime}");
+                    Console.WriteLine($"Время напоминания:\t{meeting.ReminderDateTime}");
                     Console.WriteLine();
                     counter++;
                 }
