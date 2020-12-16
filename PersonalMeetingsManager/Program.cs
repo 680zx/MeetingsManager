@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using PersonalMeetingsManager.Utilities;
 
 namespace PersonalMeetingsManager
 {
@@ -14,7 +15,7 @@ namespace PersonalMeetingsManager
             Console.WriteLine(meeting.ReminderDateTime);
 
             MeetingController meetingController = new MeetingController();
-
+            
             while(true)
             {
                 Console.WriteLine("Вы хотели бы добавить новую встречу?");
@@ -29,7 +30,8 @@ namespace PersonalMeetingsManager
 
                 meetingController.AddMeeting(new Meeting(startTime, endTime, reminderTime));
                 showMeetings(meetingController);
-                meetingController.RemoveMeeting(0);
+                TxtSaver.Save(meetingController.Meetings);
+                //meetingController.RemoveMeeting(0);
             }
         }
         //12.12.2012 12:50
