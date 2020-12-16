@@ -54,14 +54,14 @@ namespace PersonalMeetingsManager
         /// </summary>
         /// <param name="index">Индекс изменяемой встречи.</param>
         /// <param name="dateTime">Новое время напоминания.</param>
-        public void ChangeReminderDateTime(int index, DateTime dateTime)
+        public void ChangeReminderTime(int index, TimeSpan changedTimeSpan)
         {
             index--;
             if (index >= _meetings.Count || index < 0)
                 throw new ArgumentOutOfRangeException("Переданный индекс находится вне границ списка", nameof(index));
 
             var currentMeeting = _meetings[index];
-            currentMeeting.ReminderTime = dateTime;
+            currentMeeting.ReminderTime = currentMeeting.StartDateTime.Subtract(changedTimeSpan);
         }
     }
 }

@@ -8,6 +8,10 @@ namespace PersonalMeetingsManager
 {
     class Program
     {
+        /// <summary>
+        /// Интерфейс и главный цикл программы.
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             MeetingController meetingController = new MeetingController();
@@ -52,8 +56,8 @@ namespace PersonalMeetingsManager
                         // TODO: исправить -> не изменяет дату и вермя напоминания.
                         Console.Clear();
                         var changeReminderIndex = enterIndex("изменить время напоминания");
-                        var changedReminderTime = enterDateTime("напоминания о встрече");
-                        meetingController.ChangeReminderDateTime(changeReminderIndex, changedReminderTime);
+                        var changedReminderTime = enterTime();
+                        meetingController.ChangeReminderTime(changeReminderIndex, changedReminderTime);
                         printExitMessage("Измнение времени напоминания");
                         break;
                     case ConsoleKey.S:
@@ -83,7 +87,7 @@ namespace PersonalMeetingsManager
                         Environment.Exit(0);
                         break;
                     default:
-                        Console.WriteLine("\nНажата неизвестная клавиша, попробуйте снова.");
+                        Console.WriteLine("\nНажата неизвестная клавиша, попробуйте снова."); 
                         Thread.Sleep(1000);
                         break;
                 }
@@ -114,8 +118,8 @@ namespace PersonalMeetingsManager
                 {
                     var startDateTime = enterDateTime($"начала {value} встречи");
                     var endDateTime = enterDateTime($"окончания {value} встречи");
-                    var reminderDateTime = enterDateTime($"напоминания о {value} встрече");
-                    return new Meeting(startDateTime, endDateTime, reminderDateTime);
+                    var reminderTime = startDateTime.Subtract(enterTime());
+                    return new Meeting(startDateTime, endDateTime, reminderTime);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
@@ -169,13 +173,17 @@ namespace PersonalMeetingsManager
             return dateTime;
         }
 
-        private static DateTime enterTime()
+        /// <summary>
+        /// Запрашивает у пользователя интервал времени.
+        /// </summary>
+        /// <returns>Возвращает интервал времени до начала встречи.</returns>
+        private static TimeSpan enterTime()
         {
-            DateTime dateTime;
+            TimeSpan timeSpan;
             while (true)
             {
-                Console.WriteLine($"Введите время напоминания в формате (HH:mm)");
-                if (DateTime.TryParseExact(Console.ReadLine(), "HH:mm", null, DateTimeStyles.None, out dateTime))
+                Console.WriteLine($"Введите время, за которое нужно Вам напомнить о встрече (HH:mm):");
+                if (TimeSpan.TryParseExact(Console.ReadLine(), "g", null, out timeSpan))
                 {
                     break;
                 }
@@ -184,7 +192,7 @@ namespace PersonalMeetingsManager
                     Console.WriteLine($"Неверный формат времени.");
                 }
             }
-            return dateTime;
+            return timeSpan;
         }
 
         /// <summary>
