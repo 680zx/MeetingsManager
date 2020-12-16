@@ -61,7 +61,7 @@ namespace PersonalMeetingsManager
                 throw new ArgumentOutOfRangeException("Переданный индекс находится вне границ списка", nameof(index));
 
             var currentMeeting = _meetings[index];
-            currentMeeting.ReminderDateTime = dateTime;
+            currentMeeting.ReminderTime = dateTime;
         }
     }
 }

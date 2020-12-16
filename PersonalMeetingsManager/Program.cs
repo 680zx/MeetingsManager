@@ -14,8 +14,8 @@ namespace PersonalMeetingsManager
             
             while(true)
             {
-                Console.WriteLine("\tMeetings Manager");
-                Console.WriteLine("\nВыберите действие:");
+                Console.WriteLine("\tMeetings Manager\n");
+                Console.WriteLine("Выберите действие:");
                 Console.WriteLine("N - добавить новую встречу");    
                 Console.WriteLine("R - удалить встречу из списка");    
                 Console.WriteLine("E - редактировать встречу из списка");    
@@ -83,7 +83,7 @@ namespace PersonalMeetingsManager
                         Environment.Exit(0);
                         break;
                     default:
-                        Console.WriteLine("\nВведена неизвестная кнопка, попробуйте снова.");
+                        Console.WriteLine("\nНажата неизвестная клавиша, попробуйте снова.");
                         Thread.Sleep(1000);
                         break;
                 }
@@ -99,7 +99,7 @@ namespace PersonalMeetingsManager
         private static void printExitMessage(string action)
         {
             Console.WriteLine($"\n{action} успешно выполнено.");
-            Console.WriteLine("Нажмите любую кнопку для выхода.");
+            Console.WriteLine("Нажмите любую клавишу для возврата в главное меню.");
             Console.ReadKey();
         }
 
@@ -169,6 +169,24 @@ namespace PersonalMeetingsManager
             return dateTime;
         }
 
+        private static DateTime enterTime()
+        {
+            DateTime dateTime;
+            while (true)
+            {
+                Console.WriteLine($"Введите время напоминания в формате (HH:mm)");
+                if (DateTime.TryParseExact(Console.ReadLine(), "HH:mm", null, DateTimeStyles.None, out dateTime))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine($"Неверный формат времени.");
+                }
+            }
+            return dateTime;
+        }
+
         /// <summary>
         /// Выводит список всех встреч пользователя <see cref="items">.
         /// </summary>
@@ -188,7 +206,7 @@ namespace PersonalMeetingsManager
                     Console.WriteLine($"Встреча №{counter}");
                     Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime}");
                     Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime}");
-                    Console.WriteLine($"Время напоминания:\t{meeting.ReminderDateTime}");
+                    Console.WriteLine($"Время напоминания:\t{meeting.ReminderTime}");
                     Console.WriteLine();
                     counter++;
                 }
