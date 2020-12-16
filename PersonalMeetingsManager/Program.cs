@@ -2,6 +2,7 @@
 using System.Globalization;
 using PersonalMeetingsManager.Utilities;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace PersonalMeetingsManager
 {
@@ -13,7 +14,6 @@ namespace PersonalMeetingsManager
             
             while(true)
             {
-                Console.Clear();
                 Console.WriteLine("\tMeetings Manager");
                 Console.WriteLine("\nВыберите действие:");
                 Console.WriteLine("N - добавить новую встречу");    
@@ -71,15 +71,29 @@ namespace PersonalMeetingsManager
                         break;
                     case ConsoleKey.H:
                         Console.Clear();
-
+                        Console.WriteLine("Формат ввода даты и времени: (dd.MM.yyyy hh:mm).");
+                        Console.WriteLine("К примеру, дата 8 часов утра 5 минут 12 июля");
+                        Console.WriteLine("2012 года будет введена как 12.07.2012 08:05.");
+                        Console.WriteLine("Текстовый файл со встречами за опреденный день");
+                        Console.WriteLine("находится в директории Meetings проекта MyMeetings");
+                        printExitMessage("Вывод справки");
+                        break;
+                    case ConsoleKey.Q:
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("\nВведена неизвестная кнопка, попробуйте снова.");
+                        Thread.Sleep(1000);
+                        break;
                 }
+                Console.Clear();
             }
         }
-        //12.12.2012 12:50
+        //12.12.2012 08:50
 
         private static void printExitMessage(string action)
         {
-            Console.WriteLine($"{action} успешно выполнено.");
+            Console.WriteLine($"\n{action} успешно выполнено.");
             Console.WriteLine("Нажмите любую кнопку для выхода.");
             Console.ReadKey();
         }
