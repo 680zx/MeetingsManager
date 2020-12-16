@@ -18,6 +18,7 @@ namespace PersonalMeetingsManager
             
             while(true)
             {
+                TxtSaver.Save(meetingController.Meetings);
                 Console.WriteLine("Вы хотели бы добавить новую встречу?");
                 Console.WriteLine("Введите дату и время начала предстоящей встречи (dd.MM.yyyy hh:mm):\n");
                 var startTime = readDataTime();
@@ -30,7 +31,7 @@ namespace PersonalMeetingsManager
 
                 meetingController.AddMeeting(new Meeting(startTime, endTime, reminderTime));
                 showMeetings(meetingController);
-                TxtSaver.Save(meetingController.Meetings);
+                
                 //meetingController.RemoveMeeting(0);
             }
         }

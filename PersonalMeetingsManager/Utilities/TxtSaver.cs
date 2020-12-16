@@ -1,16 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System;
 
 namespace PersonalMeetingsManager.Utilities
 {
     public static class TxtSaver
     {
+        /// <summary>
+        /// Сохраняет список всех встреч <see cref="items"> в текстовый файл.
+        /// </summary>
+        /// <param name="items">Список встреч.</param>
         public static void Save(List<Meeting> items)
         {
+            if (items == null)
+                throw new ArgumentNullException("Передан пустой список", nameof(items));
+
+            var pathString = "MyMeetings";
             var fileName = "MyMeetings.txt";
 
-            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fileName))
+            if (!System.IO.Directory.Exists(pathString))
+                System.IO.Directory.CreateDirectory(pathString);
+
+            pathString = System.IO.Path.Combine(pathString, fileName);
+
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(pathString))
             {
                 if (items.Count == 0)
                 {
