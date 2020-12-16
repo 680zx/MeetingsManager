@@ -9,51 +9,65 @@ namespace PersonalMeetingsManager
     {
         static void Main(string[] args)
         {
-            Meeting meeting = new Meeting(new DateTime(), new DateTime(), new DateTime());
-
-            Console.WriteLine(meeting.StartDateTime);
-            Console.WriteLine(meeting.EndDateTime);
-            Console.WriteLine(meeting.ReminderDateTime);
-
             MeetingController meetingController = new MeetingController();
             
             while(true)
             {
-                TxtSaver.Save(meetingController.Meetings);
-                Console.WriteLine("Вы хотели бы добавить новую встречу?");
-                Console.WriteLine("Введите дату и время начала предстоящей встречи (dd.MM.yyyy hh:mm):\n");
-                var startTime = readDateTime();
-
-                Console.WriteLine("Введите дату и время окончания предстоящей встречи (dd.MM.yyyy hh:mm):\n");
-                var endTime = readDateTime();
-
-                Console.WriteLine("Введите время за сколько вам нужно напомнить о предстоящей встрече (dd.MM.yyyy hh:mm):\n");
-                var reminderTime = readDateTime();
-
-                meetingController.AddMeeting(new Meeting(startTime, endTime, reminderTime));
-                showMeetings(meetingController.Meetings);
+                Console.Clear();
+                Console.WriteLine("\tMeetings Manager");
+                Console.WriteLine("\nВыберите действие:");
+                Console.WriteLine("N - добавить новую встречу");    
+                Console.WriteLine("E - редактировать список встреч");    
+                Console.WriteLine("R - изменить напоминание о встрече");    
+                Console.WriteLine("S - вывести список встреч на экран");    
+                Console.WriteLine("P - экспорт встреч в текстовый файл");    
+                Console.WriteLine("H - справка");    
+                Console.WriteLine("Q - выход");
                 
-                //meetingController.RemoveMeeting(0);
+                var userInput = Console.ReadKey();
+                switch(userInput.Key)
+                {
+                    case ConsoleKey.N:
+                        Console.Clear();
+                        var newMeeting = EnterNewMeeting();
+                        meetingController.AddMeeting(newMeeting);
+                        break;
+                }
             }
         }
         //12.12.2012 12:50
 
         /// <summary>
+        /// Создает новую встречу.
+        /// </summary>
+        /// <returns>Возвращает новую встречу.</returns>
+        private static Meeting EnterNewMeeting()
+        {
+            var startDateTime = readDateTime("начала предстоящей встречи");
+            var endDateTime = readDateTime("окончания предстоящей встречи");
+            var reminderDateTime = readDateTime("напоминания о предстоящей встрече");
+            return new Meeting(startDateTime, endDateTime, reminderDateTime);
+        }
+
+        /// <summary>
         /// Запрашивает у пользователя дату и время.
         /// </summary>
         /// <returns>Возвращает дату и время начала/окончания/напоминания встречи.</returns>
-        private static DateTime readDateTime()
+        private static DateTime readDateTime(string time)
         {
-            string input;
             DateTime dateTime;
-
-            // TODO: добавить сообщение пользователю об ошибке, если неправильно введена дата.
-            do
+            while (true)
             {
-                input = Console.ReadLine();
-            } 
-            while (!DateTime.TryParseExact(input, "dd.MM.yyyy hh:mm", null, DateTimeStyles.None, out dateTime));
-
+                Console.WriteLine($"Введите время {time} в формате (dd.MM.yyyy hh:mm)");
+                if (DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy hh:mm", null, DateTimeStyles.None, out dateTime))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine($"Неверный формат {time}.");
+                }
+            }
             return dateTime;
         }
 
