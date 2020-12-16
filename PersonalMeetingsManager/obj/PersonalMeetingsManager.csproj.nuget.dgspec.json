@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tvrbofx\\source\\repos\\PersonalMeetingsManager\\PersonalMeetingsManager\\PersonalMeetingsManager.csproj": {}
+    "C:\\Users\\tvrbofx\\source\\repos\\MeetingsManager\\PersonalMeetingsManager\\PersonalMeetingsManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tvrbofx\\source\\repos\\PersonalMeetingsManager\\PersonalMeetingsManager\\PersonalMeetingsManager.csproj": {
+    "C:\\Users\\tvrbofx\\source\\repos\\MeetingsManager\\PersonalMeetingsManager\\PersonalMeetingsManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tvrbofx\\source\\repos\\PersonalMeetingsManager\\PersonalMeetingsManager\\PersonalMeetingsManager.csproj",
+        "projectUniqueName": "C:\\Users\\tvrbofx\\source\\repos\\MeetingsManager\\PersonalMeetingsManager\\PersonalMeetingsManager.csproj",
         "projectName": "PersonalMeetingsManager",
-        "projectPath": "C:\\Users\\tvrbofx\\source\\repos\\PersonalMeetingsManager\\PersonalMeetingsManager\\PersonalMeetingsManager.csproj",
+        "projectPath": "C:\\Users\\tvrbofx\\source\\repos\\MeetingsManager\\PersonalMeetingsManager\\PersonalMeetingsManager.csproj",
         "packagesPath": "C:\\Users\\tvrbofx\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tvrbofx\\source\\repos\\PersonalMeetingsManager\\PersonalMeetingsManager\\obj\\",
+        "outputPath": "C:\\Users\\tvrbofx\\source\\repos\\MeetingsManager\\PersonalMeetingsManager\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tvrbofx\\AppData\\Roaming\\NuGet\\NuGet.Config",

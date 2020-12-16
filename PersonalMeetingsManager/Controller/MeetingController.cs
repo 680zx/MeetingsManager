@@ -54,7 +54,7 @@ namespace PersonalMeetingsManager
         /// </summary>
         /// <param name="index">Индекс изменяемой встречи.</param>
         /// <param name="dateTime">Новое время напоминания.</param>
-        public void ChangeReminderTime(int index, DateTime dateTime)
+        public void ChangeReminderDateTime(int index, DateTime dateTime)
         {
             index--;
             if (index >= _meetings.Count || index < 0)

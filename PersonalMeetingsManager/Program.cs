@@ -17,8 +17,9 @@ namespace PersonalMeetingsManager
                 Console.WriteLine("\tMeetings Manager");
                 Console.WriteLine("\nВыберите действие:");
                 Console.WriteLine("N - добавить новую встречу");    
-                Console.WriteLine("E - редактировать встречу");    
-                Console.WriteLine("R - изменить напоминание о встрече");    
+                Console.WriteLine("R - удалить встречу из списка");    
+                Console.WriteLine("E - редактировать встречу из списка");    
+                Console.WriteLine("C - изменить напоминание о встрече");    
                 Console.WriteLine("S - вывести список встреч на экран");    
                 Console.WriteLine("P - экспорт встреч в текстовый файл");    
                 Console.WriteLine("H - справка");    
@@ -32,13 +33,23 @@ namespace PersonalMeetingsManager
                         var newMeeting = EnterMeeting("предстоящей");
                         meetingController.AddMeeting(newMeeting);
                         break;
-                    case ConsoleKey.E:
-                        // TODO: добавить проверку на наличие встреч в списке встреч.
+                    case ConsoleKey.R:
                         Console.Clear();
-                        Console.WriteLine("Введите номер встречи, которую вы хотели бы отредактировать:");
-                        var editIndex = enterIndex(); //int.TryParse(Console.ReadLine());
+                        var removeIndex = enterIndex("удалить");
+                        meetingController.RemoveMeeting(removeIndex);
+                        break;
+                    case ConsoleKey.E:
+                        // TODO: добавить проверку на наличие встреч в списке.
+                        Console.Clear();
+                        var editIndex = enterIndex("отредактировать"); //int.TryParse(Console.ReadLine());
                         var changedMeeting = EnterMeeting("");
                         meetingController.EditMeeting(editIndex, changedMeeting);
+                        break;
+                    case ConsoleKey.C:
+                        Console.Clear();
+                        var changeReminderIndex = enterIndex("изменить время напоминания");
+                        var changedReminderTime = enterDateTime("напоминания о встрече");
+                        meetingController.ChangeReminderDateTime(changeReminderIndex, changedReminderTime);
                         break;
                 }
             }
@@ -57,28 +68,27 @@ namespace PersonalMeetingsManager
             return new Meeting(startDateTime, endDateTime, reminderDateTime);
         }
 
-        private static int enterIndex()
+        private static int enterIndex(string value)
         {
             int index;
             while (true)
             {
-                try
+                Console.WriteLine($"Введите номер встречи, которую вы хотели бы {value}:");
+                if (int.TryParse(Console.ReadLine(), out index))
                 {
-                    index = int.Parse(Console.ReadLine());
                     return index;
                 }
-                catch(ArgumentOutOfRangeException)
+                else
                 {
-                    Console.WriteLine("Введен номер несуществующей встречи. Попробуйте снова.");
+                    Console.WriteLine("Неправильно введен номер встречи.");
                 }
-
             }
-            
         }
 
         /// <summary>
         /// Запрашивает у пользователя дату и время.
         /// </summary>
+        /// <param name="time">Строка, указывающая на тип вводимого пользователем этапа встречи.</param>
         /// <returns>Возвращает дату и время начала/окончания/напоминания встречи.</returns>
         private static DateTime enterDateTime(string time)
         {
