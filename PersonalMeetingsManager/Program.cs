@@ -32,29 +32,57 @@ namespace PersonalMeetingsManager
                         Console.Clear();
                         var newMeeting = EnterMeeting("предстоящей");
                         meetingController.AddMeeting(newMeeting);
+                        printExitMessage("Добавление новой встречи");
                         break;
                     case ConsoleKey.R:
                         Console.Clear();
                         var removeIndex = enterIndex("удалить");
                         meetingController.RemoveMeeting(removeIndex);
+                        printExitMessage("Удаление встречи");
                         break;
                     case ConsoleKey.E:
                         // TODO: добавить проверку на наличие встреч в списке.
                         Console.Clear();
-                        var editIndex = enterIndex("отредактировать"); //int.TryParse(Console.ReadLine());
+                        var editIndex = enterIndex("отредактировать");
                         var changedMeeting = EnterMeeting("");
                         meetingController.EditMeeting(editIndex, changedMeeting);
+                        printExitMessage("Редактирование встречи");
                         break;
                     case ConsoleKey.C:
+                        // TODO: исправить -> не изменяет дату и вермя напоминания.
                         Console.Clear();
                         var changeReminderIndex = enterIndex("изменить время напоминания");
                         var changedReminderTime = enterDateTime("напоминания о встрече");
                         meetingController.ChangeReminderDateTime(changeReminderIndex, changedReminderTime);
+                        printExitMessage("Измнение времени напоминания");
                         break;
+                    case ConsoleKey.S:
+                        Console.Clear();
+                        // TODO: изменить способ вывода списка встреч в консоль -> добавить к номеру встречи её дату.
+                        showMeetings(meetingController.Meetings);
+                        printExitMessage("Вывод списка на экран");
+                        break;
+                    case ConsoleKey.P:
+                        Console.Clear();
+                        // TODO: изменить способ вывода списка встреч в консоль -> вывод встреч на определеннуюю дату, добавить к имени файла дату встречи, 
+                        //       добавить в самое начало текстового файла дату.
+                        TxtSaver.Save(meetingController.Meetings);
+                        printExitMessage("Экспорт встреч в текстовый файл");
+                        break;
+                    case ConsoleKey.H:
+                        Console.Clear();
+
                 }
             }
         }
         //12.12.2012 12:50
+
+        private static void printExitMessage(string action)
+        {
+            Console.WriteLine($"{action} успешно выполнено.");
+            Console.WriteLine("Нажмите любую кнопку для выхода.");
+            Console.ReadKey();
+        }
 
         /// <summary>
         /// Создает новую встречу.
