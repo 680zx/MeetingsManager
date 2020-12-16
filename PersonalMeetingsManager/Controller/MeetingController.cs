@@ -63,11 +63,5 @@ namespace PersonalMeetingsManager
             var currentMeeting = _meetings[index];
             currentMeeting.ReminderDateTime = dateTime;
         }
-
-
-        public void ExportMeeting()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
