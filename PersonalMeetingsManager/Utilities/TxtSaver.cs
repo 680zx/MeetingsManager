@@ -32,12 +32,13 @@ namespace PersonalMeetingsManager.Utilities
                 else
                 {
                     int counter = 1;
+                    sw.WriteLine($"Ваши встречи на {items[0].StartDateTime.ToString("D")}\n");
                     foreach (Meeting item in items)
                     {
                         sw.WriteLine($"Встреча №{counter}");
-                        sw.WriteLine($"Начало:\t\t\t{item.StartDateTime}");
-                        sw.WriteLine($"Окончание:\t\t{item.EndDateTime}");
-                        sw.WriteLine($"Время напоминания:\t{item.ReminderDateTime}");
+                        sw.WriteLine($"Начало:\t\t\t{item.StartDateTime.ToString("t")}");
+                        sw.WriteLine($"Окончание:\t\t{item.EndDateTime.ToString("t")}");
+                        sw.WriteLine($"Время напоминания:\t{item.ReminderDateTime.ToString("t")}");
                         sw.WriteLine();
                         counter++;
                     }

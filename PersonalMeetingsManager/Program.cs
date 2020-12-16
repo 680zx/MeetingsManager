@@ -30,7 +30,7 @@ namespace PersonalMeetingsManager
                 {
                     case ConsoleKey.N:
                         Console.Clear();
-                        var newMeeting = EnterMeeting("предстоящей");
+                        var newMeeting = enterMeeting("предстоящей");
                         meetingController.AddMeeting(newMeeting);
                         printExitMessage("Добавление новой встречи");
                         break;
@@ -44,7 +44,7 @@ namespace PersonalMeetingsManager
                         // TODO: добавить проверку на наличие встреч в списке.
                         Console.Clear();
                         var editIndex = enterIndex("отредактировать");
-                        var changedMeeting = EnterMeeting("");
+                        var changedMeeting = enterMeeting("");
                         meetingController.EditMeeting(editIndex, changedMeeting);
                         printExitMessage("Редактирование встречи");
                         break;
@@ -71,7 +71,8 @@ namespace PersonalMeetingsManager
                         break;
                     case ConsoleKey.H:
                         Console.Clear();
-                        Console.WriteLine("Формат ввода даты и времени: (dd.MM.yyyy hh:mm).");
+                        Console.WriteLine("Формат ввода даты и времени: (dd.MM.yyyy HH:mm),");
+                        Console.WriteLine("приложение использует 24-х часовой формат времени.");
                         Console.WriteLine("К примеру, дата 8 часов утра 5 минут 12 июля");
                         Console.WriteLine("2012 года будет введена как 12.07.2012 08:05.");
                         Console.WriteLine("Текстовый файл со встречами за опреденный день");
@@ -89,8 +90,12 @@ namespace PersonalMeetingsManager
                 Console.Clear();
             }
         }
-        //12.12.2012 08:50
+        //01.01.2021 23:50
 
+        /// <summary>
+        /// Выводит сообщение об успешном выполнении действии пользоватаеля.
+        /// </summary>
+        /// <param name="action">Тип действия.</param>
         private static void printExitMessage(string action)
         {
             Console.WriteLine($"\n{action} успешно выполнено.");
@@ -102,20 +107,34 @@ namespace PersonalMeetingsManager
         /// Создает новую встречу.
         /// </summary>
         /// <returns>Возвращает новую встречу.</returns>
-        private static Meeting EnterMeeting(string value)
+        private static Meeting enterMeeting(string value)
         {
-            var startDateTime = enterDateTime($"начала {value} встречи");
-            var endDateTime = enterDateTime($"окончания {value} встречи");
-            var reminderDateTime = enterDateTime($"напоминания о {value} встрече");
-            return new Meeting(startDateTime, endDateTime, reminderDateTime);
+            while(true)
+                try
+                {
+                    var startDateTime = enterDateTime($"начала {value} встречи");
+                    var endDateTime = enterDateTime($"окончания {value} встречи");
+                    var reminderDateTime = enterDateTime($"напоминания о {value} встрече");
+                    return new Meeting(startDateTime, endDateTime, reminderDateTime);
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.ParamName}\n");
+                }
+           
         }
 
-        private static int enterIndex(string value)
+        /// <summary>
+        /// Запращивает у пользователя индекс.
+        /// </summary>
+        /// <param name="action">Тип действия.</param>
+        /// <returns></returns>
+        private static int enterIndex(string action)
         {
             int index;
             while (true)
             {
-                Console.WriteLine($"Введите номер встречи, которую вы хотели бы {value}:");
+                Console.WriteLine($"Введите номер встречи, которую вы хотели бы {action}:");
                 if (int.TryParse(Console.ReadLine(), out index))
                 {
                     return index;
@@ -137,8 +156,8 @@ namespace PersonalMeetingsManager
             DateTime dateTime;
             while (true)
             {
-                Console.WriteLine($"Введите время {time} в формате (dd.MM.yyyy hh:mm)");
-                if (DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy hh:mm", null, DateTimeStyles.None, out dateTime))
+                Console.WriteLine($"Введите дату и время {time} в формате (dd.MM.yyyy HH:mm)");
+                if (DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out dateTime))
                 {
                     break;
                 }

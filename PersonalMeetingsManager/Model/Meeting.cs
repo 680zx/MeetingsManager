@@ -23,6 +23,12 @@ namespace PersonalMeetingsManager
 
         public Meeting(DateTime startDateTime, DateTime endDateTime, DateTime reminderTime)
         {
+            if (startDateTime < DateTime.Now)
+                throw new ArgumentOutOfRangeException("Время встречи может быть установлено только на будущее.", nameof(startDateTime));
+
+            if (startDateTime >= endDateTime)
+                throw new ArgumentOutOfRangeException("Время начала встречи не может быть больше времени окончания.", nameof(endDateTime));
+
             _startDateTime = startDateTime;
             _endDateTime = endDateTime;
             _reminderDateTime = reminderTime;
