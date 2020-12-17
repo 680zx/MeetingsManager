@@ -11,42 +11,52 @@ namespace PersonalMeetingsManager.Utilities
         /// Сохраняет список всех встреч <see cref="items"> в текстовый файл.
         /// </summary>
         /// <param name="items">Список встреч.</param>
-        public static void Save(List<Meeting> items, DateTime userDate)
+        public static void Save(List<Meeting> items, DateTime userInputDate)
         {
             if (items == null)
                 throw new ArgumentNullException("Передан пустой список", nameof(items));
 
+            var userDateTimeMeetings = from item in items
+                                       where item.StartDateTime.Date == userInputDate.Date
+                                       select item;
+
             var pathString = "MyMeetings";
             var fileName = "MyMeetings.txt";
-
+    
             if (!Directory.Exists(pathString))
                 Directory.CreateDirectory(pathString);
 
             pathString = Path.Combine(pathString, fileName);
-
-            var userDateTimeMeetings = from item in items
-                                       where item.StartDateTime.Date == userDate.Date
-                                       select item;
-
-            using (StreamWriter sw = new StreamWriter(pathString))
+            FileStream fs = null;
+            try
             {
-                if (items.Count == 0)
-                    sw.WriteLine($"Сейчас в Вашем расписании нет ни одной встречи, запланированной на {userDate.ToString("D")}");
-                else
+                fs = new FileStream(pathString, FileMode.OpenOrCreate);
+                using (StreamWriter sw = new StreamWriter(fs))
                 {
-                    int counter = 1;
-                    sw.WriteLine($"Встречи, запланированные на {userDate.ToString("D")}");
-                    foreach (Meeting item in userDateTimeMeetings)
+                    if (items.Count == 0)
+                        sw.WriteLine($"Сейчас в Вашем расписании нет ни одной встречи, запланированной на {userInputDate.ToString("D")}");
+                    else
                     {
-                        sw.WriteLine($"Встреча №{counter}");
-                        sw.WriteLine($"Начало:\t\t\t{item.StartDateTime.ToString("t")}");
-                        sw.WriteLine($"Окончание:\t\t{item.EndDateTime.ToString("t")}");
-                        sw.WriteLine($"Время напоминания:\t{item.ReminderDateTime.ToString("t")}");
-                        sw.WriteLine();
-                        counter++;
+                        int counter = 1;
+                        sw.WriteLine($"Встречи, запланированные на {userInputDate.ToString("D")}");
+                        foreach (Meeting item in userDateTimeMeetings)
+                        {
+                            sw.WriteLine($"Встреча №{counter}");
+                            sw.WriteLine($"Начало:\t\t\t{item.StartDateTime.ToString("t")}");
+                            sw.WriteLine($"Окончание:\t\t{item.EndDateTime.ToString("t")}");
+                            sw.WriteLine($"Время напоминания:\t{item.ReminderDateTime.ToString("t")}");
+                            sw.WriteLine();
+                            counter++;
+                        }
                     }
                 }
             }
+            finally
+            {
+                if (fs != null)
+                    fs.Dispose();
+            }
+            
         }
     }
 }

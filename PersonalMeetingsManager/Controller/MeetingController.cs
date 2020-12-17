@@ -9,6 +9,7 @@ namespace PersonalMeetingsManager
         private List<Meeting> _meetings = new List<Meeting>();
         public List<Meeting> Meetings { get => _meetings; }
 
+        // TODO: добавить напоминание о встрече
         public MeetingController()
         {
         }

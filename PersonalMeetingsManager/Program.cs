@@ -9,6 +9,7 @@ namespace PersonalMeetingsManager
 {
     class Program
     {
+        // TODO: добавить Enum заместо string в методах enterIndex("удалить");enterIndex("отредактировать");enterDate("для просмотра");
         /// <summary>
         /// Интерфейс и главный цикл программы.
         /// </summary>
@@ -91,8 +92,6 @@ namespace PersonalMeetingsManager
 
                     case ConsoleKey.P:
                         Console.Clear();
-                        // TODO: изменить способ вывода списка встреч в консоль -> вывод встреч на определеннуюю дату, добавить к имени файла дату встречи, 
-                        //       добавить в самое начало текстового файла дату.
                         var dateTimeTxt = enterDate("для записи в файл");
                         try
                         {
@@ -275,21 +274,21 @@ namespace PersonalMeetingsManager
             }
         }
 
-        private static void showMeetings(List<Meeting> items, DateTime userDate)
+        private static void showMeetings(List<Meeting> items, DateTime userInputDate)
         {
             if (items == null)
                 throw new ArgumentNullException("Список встреч не может быть null.", nameof(items));
 
             var userDateTimeMeetings = from item in items
-                                        where item.StartDateTime.Date == userDate.Date
+                                        where item.StartDateTime.Date == userInputDate.Date
                                         select item;
 
             if (items.Count == 0)
-                Console.WriteLine($"Сейчас в Вашем расписании нет ни одной встречи, запланированной на {userDate.ToString("D")}");
+                Console.WriteLine($"Сейчас в Вашем расписании нет ни одной встречи, запланированной на {userInputDate.ToString("D")}");
             else
             {
                 int counter = 1;
-                Console.WriteLine($"Встречи, запланированные на {userDate.ToString("D")}");
+                Console.WriteLine($"Встречи, запланированные на {userInputDate.ToString("D")}");
                 foreach (Meeting meeting in userDateTimeMeetings)
                 {
                     Console.WriteLine($"Встреча №{counter}");

@@ -10,6 +10,7 @@ namespace PersonalMeetingsManager
         private DateTime _endDateTime;
         private DateTime _reminderDateTime;
 
+        // TODO: сделать проверки на пересечение времени проведения встреч
         public DateTime StartDateTime 
         { 
             get => _startDateTime;
