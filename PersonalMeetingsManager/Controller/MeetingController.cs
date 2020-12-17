@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PersonalMeetingsManager
 {
     public class MeetingController
     {
         private List<Meeting> _meetings = new List<Meeting>();
+        private DateTime _nextReminderDateTime;
         public List<Meeting> Meetings { get => _meetings; }
+        public DateTime NextReminderDateTime { get => _nextReminderDateTime; }
+        
 
         // TODO: добавить напоминание о встрече
         public MeetingController()
@@ -22,12 +24,11 @@ namespace PersonalMeetingsManager
         {
             if (newMeeting == null)
                 throw new ArgumentNullException("Передан null в качестве параметра.", nameof(newMeeting));
-            
             foreach (Meeting meeting in _meetings)
             {
                 if (newMeeting.StartDateTime >= meeting.StartDateTime && newMeeting.StartDateTime < meeting.EndDateTime ||
                     newMeeting.EndDateTime > meeting.StartDateTime && newMeeting.EndDateTime < meeting.EndDateTime || 
-                    newMeeting.StartDateTime >= meeting.StartDateTime && newMeeting.EndDateTime >= meeting.EndDateTime)
+                    newMeeting.StartDateTime <= meeting.StartDateTime && newMeeting.EndDateTime >= meeting.EndDateTime)
                 {
                     throw new ArgumentException("Невозможно добавить новую встречу - пересечение с уже существующей встречей.");
                 }
@@ -41,9 +42,8 @@ namespace PersonalMeetingsManager
         /// <param name="index">Индекс удаляемой встречи.</param>
         public void RemoveMeeting(int index)
         {
-            index--;
             if (index >= _meetings.Count || index < 0)
-                throw new ArgumentOutOfRangeException("Переданный индекс находится вне границ списка", nameof(index));
+                throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка", nameof(index));
 
             _meetings.RemoveAt(index);
         }
@@ -57,10 +57,8 @@ namespace PersonalMeetingsManager
         {
             if (changedMeeting == null)
                 throw new ArgumentNullException("Передан null в качестве параметра.", nameof(changedMeeting));
-
-            index--;
             if (index >= _meetings.Count || index < 0)
-                throw new ArgumentOutOfRangeException("Переданный индекс находится вне границ списка", nameof(index));
+                throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка.", nameof(index));
 
             _meetings[index] = changedMeeting.Clone() as Meeting;
         }
@@ -74,13 +72,25 @@ namespace PersonalMeetingsManager
         {
             if (changedTimeSpan == null)
                 throw new ArgumentNullException("Передан null в качестве параметра.", nameof(changedTimeSpan));
-
-            index--;
             if (index >= _meetings.Count || index < 0)
-                throw new ArgumentOutOfRangeException("Переданный индекс находится вне границ списка", nameof(index));
+                throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка", nameof(index));
+            if (changedTimeSpan.TotalMinutes < 0)
+                throw new ArgumentException("Невозможно установить время напоминание о встрече позже времени ее начала.");
 
             var currentMeeting = _meetings[index];
             currentMeeting.ReminderDateTime = currentMeeting.StartDateTime.Subtract(changedTimeSpan);
         }
+        
+        public void setNextReminderDateTime()
+        {
+            _nextReminderDateTime = DateTime.MaxValue;
+            for (int i = 0; i < _meetings.Count; i++)
+            {
+                if (_meetings[i].ReminderDateTime > DateTime.Now && _meetings[i].ReminderDateTime < _nextReminderDateTime)
+                    _nextReminderDateTime = _meetings[i].ReminderDateTime;
+            }
+        }
+
+        public void 
     }
 }

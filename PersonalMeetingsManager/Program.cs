@@ -10,6 +10,8 @@ namespace PersonalMeetingsManager
     class Program
     {
         // TODO: добавить Enum заместо string в методах enterIndex("удалить");enterIndex("отредактировать");enterDate("для просмотра");
+        // TODO: добавить возможность выхода из меню редактирования, удаления и т.д.
+        // Изменить блок try - catch, добавить новые классы исключений
         /// <summary>
         /// Интерфейс и главный цикл программы.
         /// </summary>
@@ -20,6 +22,7 @@ namespace PersonalMeetingsManager
             
             while(true)
             {
+                meetingController.getNextReminderDateTime();
                 Console.WriteLine("\tMeetings Manager\n");
                 Console.WriteLine("Выберите действие:");
                 Console.WriteLine("N - добавить новую встречу");    
@@ -52,15 +55,24 @@ namespace PersonalMeetingsManager
                     case ConsoleKey.R:
                         Console.Clear();
                         showMeetings(meetingController.Meetings);
-                        var removeIndex = enterIndex("удалить");
-                        meetingController.RemoveMeeting(removeIndex);
-                        printExitMessage("Удаление встречи успешно выполнено.");
+                        var removeIndex = enterIndex("удалить") - 1;
+                        try
+                        {
+                            meetingController.RemoveMeeting(removeIndex);
+                            printExitMessage("Удаление встречи успешно выполнено.");
+                        }
+                        catch (ArgumentOutOfRangeException ex)
+                        {
+                            Console.WriteLine($"Ошибка: {ex.ParamName}");
+                            printExitMessage("Удаление встречи не выполнено.");
+                        }
+                       
                         break;
 
                     case ConsoleKey.E:
                         Console.Clear();
                         showMeetings(meetingController.Meetings);
-                        var editIndex = enterIndex("отредактировать");
+                        var editIndex = enterIndex("отредактировать") - 1;
                         var changedMeeting = enterMeeting();
                         try
                         {
@@ -77,16 +89,21 @@ namespace PersonalMeetingsManager
                     case ConsoleKey.C:
                         Console.Clear();
                         showMeetings(meetingController.Meetings);
-                        var changeReminderIndex = enterIndex("изменить время напоминания");
+                        var reminderTimeIndex = enterIndex("изменить время напоминания") - 1;
                         var changedReminderTime = enterTime();
                         try
                         {
-                            meetingController.ChangeReminderTime(changeReminderIndex, changedReminderTime);
+                            meetingController.ChangeReminderTime(reminderTimeIndex, changedReminderTime);
                             printExitMessage("Изменение времени напоминания успешно выполнено.");
                         }
                         catch (ArgumentOutOfRangeException ex)
                         {
                             Console.WriteLine($"Ошибка: {ex.ParamName}");
+                            printExitMessage("Изменение времени напоминания не выполнено.");
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            Console.WriteLine($"Ошибка: {ex.Message}");
                             printExitMessage("Изменение времени напоминания не выполнено.");
                         }
                         break;
@@ -95,7 +112,7 @@ namespace PersonalMeetingsManager
                         Console.Clear();
                         var userIntputDate = enterDate("для просмотра");
                         showMeetings(meetingController.Meetings, userIntputDate);
-                        printExitMessage("Вывод списка на экран успешно выполнен.");
+                        printExitMessage();
                         break;
 
                     case ConsoleKey.P:
@@ -128,6 +145,12 @@ namespace PersonalMeetingsManager
                         Environment.Exit(0);
                         break;
 
+                    case ConsoleKey.T:
+                        Console.Clear();
+                        Console.WriteLine($"{meetingController.NextReminderDateTime}");
+                        printExitMessage();
+                        break;
+
                     default:
                         Console.WriteLine("\nНажата неизвестная клавиша, попробуйте снова."); 
                         Thread.Sleep(1000);
@@ -145,6 +168,15 @@ namespace PersonalMeetingsManager
         private static void printExitMessage(string message)
         {
             Console.WriteLine($"\n{message}");
+            Console.WriteLine("Нажмите любую клавишу для возврата в главное меню.");
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// Выводит предложение возврата в меню.
+        /// </summary>
+        private static void printExitMessage()
+        {
             Console.WriteLine("Нажмите любую клавишу для возврата в главное меню.");
             Console.ReadKey();
         }
@@ -172,7 +204,7 @@ namespace PersonalMeetingsManager
         }
 
         /// <summary>
-        /// Запращивает у пользователя индекс встречи для изменения/удаления.
+        /// Запрашивает у пользователя индекс встречи для изменения/удаления.
         /// </summary>
         /// <param name="action">Тип действия.</param>
         /// <returns></returns>
@@ -216,6 +248,11 @@ namespace PersonalMeetingsManager
             return dateTime;
         }
 
+        /// <summary>
+        /// Запрашивает у пользователя дату.
+        /// </summary>
+        /// <param name="meetingStage">Этап встречи.</param>
+        /// <returns>Возвращает введенную пользователем дату.</returns>
         private static DateTime enterDate(string meetingStage)
         {
             DateTime dateTime;
@@ -235,7 +272,7 @@ namespace PersonalMeetingsManager
         }
 
         /// <summary>
-        /// Запрашивает у пользователя интервал времени.
+        /// Запрашивает у пользователя интервал времени до начала встречи.
         /// </summary>
         /// <returns>Возвращает интервал времени до начала встречи.</returns>
         private static TimeSpan enterTime()
@@ -257,20 +294,20 @@ namespace PersonalMeetingsManager
         }
 
         /// <summary>
-        /// Выводит список всех встреч пользователя <see cref="items">.
+        /// Выводит список всех встреч пользователя <see cref="meetings">.
         /// </summary>
-        /// <param name="items"></param>
-        private static void showMeetings(List<Meeting> items)
+        /// <param name="meetings">Список встреч.</param>
+        private static void showMeetings(List<Meeting> meetings)
         {
-            if (items == null)
-                throw new ArgumentNullException("Список встреч не может быть null.", nameof(items));
+            if (meetings == null)
+                throw new ArgumentNullException("Список встреч не может быть null.", nameof(meetings));
 
-            if (items.Count == 0)
+            if (meetings.Count == 0)
                 Console.WriteLine("Сейчас в Вашем расписании нет ни одной встречи.");
             else
             {
                 int counter = 1;
-                foreach (Meeting meeting in items)
+                foreach (Meeting meeting in meetings)
                 {
                     Console.WriteLine($"Встреча №{counter}");
                     Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime}");
@@ -282,12 +319,17 @@ namespace PersonalMeetingsManager
             }
         }
 
+        /// <summary>
+        /// Выводит список встреч пользователя на введенную дату <see cref="userDateInput"/>.
+        /// </summary>
+        /// <param name="meetings">Список встреч.</param>
+        /// <param name="userInputDate">Выбранная дата.</param>
         private static void showMeetings(List<Meeting> meetings, DateTime userInputDate)
         {
             if (meetings == null)
                 throw new ArgumentNullException("Список встреч не может быть null.", nameof(meetings));
 
-            var userDateTimeMeetings = from meeting in meetings
+            var userOnDateMeetings = from meeting in meetings
                                         where meeting.StartDateTime.Date == userInputDate.Date
                                         select meeting;
 
@@ -296,8 +338,8 @@ namespace PersonalMeetingsManager
             else
             {
                 int counter = 1;
-                Console.WriteLine($"Встречи, запланированные на {userInputDate.ToString("D")}");
-                foreach (Meeting meeting in userDateTimeMeetings)
+                Console.WriteLine($"Встречи, запланированные на {userInputDate.ToString("D")}:\n");
+                foreach (Meeting meeting in userOnDateMeetings)
                 {
                     Console.WriteLine($"Встреча №{counter}");
                     Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime.ToString("t")}");

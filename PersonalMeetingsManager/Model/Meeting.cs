@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PersonalMeetingsManager
 {
@@ -46,6 +44,8 @@ namespace PersonalMeetingsManager
                 throw new ArgumentOutOfRangeException("Время встречи может быть установлено только на будущее.", nameof(startDateTime));
             if (startDateTime >= endDateTime)
                 throw new ArgumentOutOfRangeException("Время начала встречи не может быть больше времени окончания.", nameof(endDateTime));
+            if (reminderTime.TotalMinutes < 0)
+                throw new ArgumentException("Невозможно установить время напоминание о встрече позже времени ее начала.");
 
             _startDateTime = startDateTime;
             _endDateTime = endDateTime;

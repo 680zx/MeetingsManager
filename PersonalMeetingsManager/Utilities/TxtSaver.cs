@@ -8,7 +8,7 @@ namespace PersonalMeetingsManager.Utilities
     public static class TxtSaver
     {
         /// <summary>
-        /// Сохраняет список всех встреч <see cref="items"> в текстовый файл.
+        /// Сохраняет список всех встреч <see cref="meetings"> в текстовый файл.
         /// </summary>
         /// <param name="meetings">Список встреч.</param>
         public static void Save(List<Meeting> meetings, DateTime userInputDate)
@@ -16,7 +16,7 @@ namespace PersonalMeetingsManager.Utilities
             if (meetings == null)
                 throw new ArgumentNullException("Передан пустой список", nameof(meetings));
 
-            var userDateTimeMeetings = from meeting in meetings
+            var userOnDateMeetings = from meeting in meetings
                                        where meeting.StartDateTime.Date == userInputDate.Date
                                        select meeting;
 
@@ -38,8 +38,8 @@ namespace PersonalMeetingsManager.Utilities
                     else
                     {
                         int counter = 1;
-                        sw.WriteLine($"Встречи, запланированные на {userInputDate.ToString("D")}");
-                        foreach (Meeting meeting in userDateTimeMeetings)
+                        sw.WriteLine($"Встречи, запланированные на {userInputDate.ToString("D")}:\n");
+                        foreach (Meeting meeting in userOnDateMeetings)
                         {
                             sw.WriteLine($"Встреча №{counter}");
                             sw.WriteLine($"Начало:\t\t\t{meeting.StartDateTime.ToString("t")}");
