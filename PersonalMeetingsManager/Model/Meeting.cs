@@ -10,7 +10,6 @@ namespace PersonalMeetingsManager
         private DateTime _endDateTime;
         private DateTime _reminderDateTime;
 
-        // TODO: сделать проверки на пересечение времени проведения встреч
         public DateTime StartDateTime 
         { 
             get => _startDateTime;
@@ -45,7 +44,6 @@ namespace PersonalMeetingsManager
         {
             if (startDateTime < DateTime.Now)
                 throw new ArgumentOutOfRangeException("Время встречи может быть установлено только на будущее.", nameof(startDateTime));
-
             if (startDateTime >= endDateTime)
                 throw new ArgumentOutOfRangeException("Время начала встречи не может быть больше времени окончания.", nameof(endDateTime));
 

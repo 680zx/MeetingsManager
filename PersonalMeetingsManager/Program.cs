@@ -37,8 +37,16 @@ namespace PersonalMeetingsManager
                     case ConsoleKey.N:
                         Console.Clear();
                         var newMeeting = enterMeeting();
-                        meetingController.AddMeeting(newMeeting);
-                        printExitMessage("Добавление новой встречи успешно выполнено.");
+                        try
+                        {
+                            meetingController.AddMeeting(newMeeting);
+                            printExitMessage("Добавление новой встречи успешно выполнено.");
+                        }
+                        catch (ArgumentException ex)
+                        {
+                            Console.WriteLine($"Ошибка: {ex.Message}");
+                            printExitMessage("Новая встреча не была добавлена.");
+                        }
                         break;
 
                     case ConsoleKey.R:
@@ -85,17 +93,17 @@ namespace PersonalMeetingsManager
 
                     case ConsoleKey.S:
                         Console.Clear();
-                        var dateTime = enterDate("для просмотра");
-                        showMeetings(meetingController.Meetings, dateTime);
+                        var userIntputDate = enterDate("для просмотра");
+                        showMeetings(meetingController.Meetings, userIntputDate);
                         printExitMessage("Вывод списка на экран успешно выполнен.");
                         break;
 
                     case ConsoleKey.P:
                         Console.Clear();
-                        var dateTimeTxt = enterDate("для записи в файл");
+                        var userIntputDateTxt = enterDate("для записи в файл");
                         try
                         {
-                            TxtSaver.Save(meetingController.Meetings, dateTimeTxt);
+                            TxtSaver.Save(meetingController.Meetings, userIntputDateTxt);
                             printExitMessage("Экспорт встреч в текстовый файл успешно выполнен.");
                         }
                         catch (ArgumentNullException ex)
@@ -274,16 +282,16 @@ namespace PersonalMeetingsManager
             }
         }
 
-        private static void showMeetings(List<Meeting> items, DateTime userInputDate)
+        private static void showMeetings(List<Meeting> meetings, DateTime userInputDate)
         {
-            if (items == null)
-                throw new ArgumentNullException("Список встреч не может быть null.", nameof(items));
+            if (meetings == null)
+                throw new ArgumentNullException("Список встреч не может быть null.", nameof(meetings));
 
-            var userDateTimeMeetings = from item in items
-                                        where item.StartDateTime.Date == userInputDate.Date
-                                        select item;
+            var userDateTimeMeetings = from meeting in meetings
+                                        where meeting.StartDateTime.Date == userInputDate.Date
+                                        select meeting;
 
-            if (items.Count == 0)
+            if (meetings.Count == 0)
                 Console.WriteLine($"Сейчас в Вашем расписании нет ни одной встречи, запланированной на {userInputDate.ToString("D")}");
             else
             {

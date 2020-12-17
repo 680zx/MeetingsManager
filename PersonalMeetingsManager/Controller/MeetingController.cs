@@ -22,6 +22,16 @@ namespace PersonalMeetingsManager
         {
             if (newMeeting == null)
                 throw new ArgumentNullException("Передан null в качестве параметра.", nameof(newMeeting));
+            
+            foreach (Meeting meeting in _meetings)
+            {
+                if (newMeeting.StartDateTime >= meeting.StartDateTime && newMeeting.StartDateTime < meeting.EndDateTime ||
+                    newMeeting.EndDateTime > meeting.StartDateTime && newMeeting.EndDateTime < meeting.EndDateTime || 
+                    newMeeting.StartDateTime >= meeting.StartDateTime && newMeeting.EndDateTime >= meeting.EndDateTime)
+                {
+                    throw new ArgumentException("Невозможно добавить новую встречу - пересечение с уже существующей встречей.");
+                }
+            }
             _meetings.Add(newMeeting);
         }
 
