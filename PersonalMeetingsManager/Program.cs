@@ -11,7 +11,6 @@ namespace PersonalMeetingsManager
     {
         // TODO: добавить Enum заместо string в методах enterIndex("удалить");enterIndex("отредактировать");enterDate("для просмотра");
         // TODO: добавить возможность выхода из меню редактирования, удаления и т.д.
-        // Изменить блок try - catch, добавить новые классы исключений
         /// <summary>
         /// Интерфейс и главный цикл программы.
         /// </summary>
@@ -51,18 +50,26 @@ namespace PersonalMeetingsManager
                         case ConsoleKey.R:
                             Console.Clear();
                             showMeetings(meetingController.Meetings);
-                            var removeIndex = enterIndex("удалить") - 1;
-                            meetingController.RemoveMeeting(removeIndex);
-                            printExitMessage("Удаление встречи успешно выполнено.");
+                            if (meetingController.Meetings.Count != 0)
+                            {
+                                var removeIndex = enterIndex("удалить") - 1;
+                                meetingController.RemoveMeeting(removeIndex);
+                                printExitMessage("Удаление встречи успешно выполнено.");
+                            }
+                            else printExitMessage();
                             break;
 
                         case ConsoleKey.E:
                             Console.Clear();
                             showMeetings(meetingController.Meetings);
-                            var editIndex = enterIndex("отредактировать") - 1;
-                            var changedMeeting = enterMeeting();
-                            meetingController.EditMeeting(editIndex, changedMeeting);
-                            printExitMessage("Редактирование встречи успешно выполнено.");
+                            if (meetingController.Meetings.Count != 0)
+                            {
+                                var editIndex = enterIndex("отредактировать") - 1;
+                                var changedMeeting = enterMeeting();
+                                meetingController.EditMeeting(editIndex, changedMeeting);
+                                printExitMessage("Редактирование встречи успешно выполнено.");
+                            }
+                            else printExitMessage();
                             break;
 
                         case ConsoleKey.C:
@@ -171,6 +178,10 @@ namespace PersonalMeetingsManager
                     return new Meeting(startDateTime, endDateTime, reminderTime);
                 }
                 catch (ArgumentOutOfRangeException ex)
+                {
+                    Console.WriteLine($"Ошибка: {ex.ParamName}\n");
+                }
+                catch (TimeErrorException ex)
                 {
                     Console.WriteLine($"Ошибка: {ex.ParamName}\n");
                 }
