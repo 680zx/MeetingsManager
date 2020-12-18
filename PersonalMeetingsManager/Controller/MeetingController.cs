@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PersonalMeetingsManager.Utilities;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace PersonalMeetingsManager
 {
@@ -7,8 +9,10 @@ namespace PersonalMeetingsManager
     {
         private List<Meeting> _meetings = new List<Meeting>();
         private DateTime _nextReminderDateTime;
+        private Meeting _nextMeeting;
         public List<Meeting> Meetings { get => _meetings; }
         public DateTime NextReminderDateTime { get => _nextReminderDateTime; }
+        public Meeting NextMeeting { get => _nextMeeting; }
         
 
         // TODO: добавить напоминание о встрече
@@ -30,10 +34,11 @@ namespace PersonalMeetingsManager
                     newMeeting.EndDateTime > meeting.StartDateTime && newMeeting.EndDateTime < meeting.EndDateTime || 
                     newMeeting.StartDateTime <= meeting.StartDateTime && newMeeting.EndDateTime >= meeting.EndDateTime)
                 {
-                    throw new ArgumentException("Невозможно добавить новую встречу - пересечение с уже существующей встречей.");
+                    throw new MeetingCrossingException("Невозможно добавить новую встречу - пересечение с уже существующей встречей.", nameof(newMeeting));
                 }
             }
             _meetings.Add(newMeeting);
+            setNextReminderDateTime();
         }
 
         /// <summary>
@@ -46,6 +51,7 @@ namespace PersonalMeetingsManager
                 throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка", nameof(index));
 
             _meetings.RemoveAt(index);
+            setNextReminderDateTime();
         }
 
         /// <summary>
@@ -61,6 +67,7 @@ namespace PersonalMeetingsManager
                 throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка.", nameof(index));
 
             _meetings[index] = changedMeeting.Clone() as Meeting;
+            setNextReminderDateTime();
         }
 
         /// <summary>
@@ -75,22 +82,26 @@ namespace PersonalMeetingsManager
             if (index >= _meetings.Count || index < 0)
                 throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка", nameof(index));
             if (changedTimeSpan.TotalMinutes < 0)
-                throw new ArgumentException("Невозможно установить время напоминание о встрече позже времени ее начала.");
+                throw new TimeErrorException("Невозможно установить время напоминание о встрече позже времени ее начала.", nameof(changedTimeSpan));
 
             var currentMeeting = _meetings[index];
             currentMeeting.ReminderDateTime = currentMeeting.StartDateTime.Subtract(changedTimeSpan);
+            setNextReminderDateTime();
         }
         
-        public void setNextReminderDateTime()
+        private void setNextReminderDateTime()
         {
             _nextReminderDateTime = DateTime.MaxValue;
             for (int i = 0; i < _meetings.Count; i++)
             {
                 if (_meetings[i].ReminderDateTime > DateTime.Now && _meetings[i].ReminderDateTime < _nextReminderDateTime)
+                {
                     _nextReminderDateTime = _meetings[i].ReminderDateTime;
+                    _nextMeeting = _meetings[i];
+                }
             }
         }
 
-        public void 
+        
     }
 }

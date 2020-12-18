@@ -22,7 +22,9 @@ namespace PersonalMeetingsManager
             
             while(true)
             {
-                meetingController.getNextReminderDateTime();
+                //Timer timer = new Timer(showMeetingNotification, meetingController.NextMeeting, 0, meetingController.ReminderInterval.Seconds);       
+                if (meetingController.NextMeeting != null && DateTime.Now == meetingController.NextReminderDateTime)
+                    showMeetingNotification(meetingController.NextMeeting);
                 Console.WriteLine("\tMeetings Manager\n");
                 Console.WriteLine("Выберите действие:");
                 Console.WriteLine("N - добавить новую встречу");    
@@ -147,7 +149,7 @@ namespace PersonalMeetingsManager
 
                     case ConsoleKey.T:
                         Console.Clear();
-                        Console.WriteLine($"{meetingController.NextReminderDateTime}");
+                        //Console.WriteLine($"{meetingController.ReminderTime}");
                         printExitMessage();
                         break;
 
@@ -310,10 +312,7 @@ namespace PersonalMeetingsManager
                 foreach (Meeting meeting in meetings)
                 {
                     Console.WriteLine($"Встреча №{counter}");
-                    Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime}");
-                    Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime}");
-                    Console.WriteLine($"Время напоминания:\t{meeting.ReminderDateTime}");
-                    Console.WriteLine();
+                    showSingleMeeting(meeting);
                     counter++;
                 }
             }
@@ -342,13 +341,31 @@ namespace PersonalMeetingsManager
                 foreach (Meeting meeting in userOnDateMeetings)
                 {
                     Console.WriteLine($"Встреча №{counter}");
-                    Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime.ToString("t")}");
-                    Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime.ToString("t")}");
-                    Console.WriteLine($"Время напоминания:\t{meeting.ReminderDateTime.ToString("t")}");
-                    Console.WriteLine();
+                    showSingleMeeting(meeting);
                     counter++;
                 }
             }
+        }
+
+        private static void Count()
+        {
+
+        }
+
+        private static void showMeetingNotification(object meeting)
+        {
+            Console.Clear();
+            Console.WriteLine("\tНапоминание о предстоящей встрече");
+            showSingleMeeting(meeting as Meeting);
+            printExitMessage();
+        }
+
+        private static void showSingleMeeting(Meeting meeting)
+        {
+            Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime.ToString("t")}");
+            Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime.ToString("t")}");
+            Console.WriteLine($"Время напоминания:\t{meeting.ReminderDateTime.ToString("t")}");
+            Console.WriteLine();
         }
     }
 }
