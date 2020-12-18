@@ -68,10 +68,14 @@ namespace PersonalMeetingsManager
                         case ConsoleKey.C:
                             Console.Clear();
                             showMeetings(meetingController.Meetings);
-                            var reminderTimeIndex = enterIndex("изменить время напоминания") - 1;
-                            var changedReminderTime = enterTime();
-                            meetingController.ChangeReminderTime(reminderTimeIndex, changedReminderTime);
-                            printExitMessage("Изменение времени напоминания успешно выполнено.");
+                            if (meetingController.Meetings.Count != 0)
+                            {
+                                var reminderTimeIndex = enterIndex("изменить время напоминания") - 1;
+                                var changedReminderTime = enterTime();
+                                meetingController.ChangeReminderTime(reminderTimeIndex, changedReminderTime);
+                                printExitMessage("Изменение времени напоминания успешно выполнено.");
+                            }
+                            else printExitMessage();
                             break;
 
                         case ConsoleKey.S:
@@ -108,17 +112,16 @@ namespace PersonalMeetingsManager
                             Thread.Sleep(1000);
                             break;
                     }
-                    Console.Clear();
                 }
                 catch(ArgumentNullException ex)
                 {
                     printExitMessage($"Ошибка: {ex.Message}");
                 }
-                catch (ArgumentOutOfRangeException ex)
+                catch(ArgumentOutOfRangeException ex)
                 {
-                    printExitMessage($"Ошибка: {ex.Message}");
+                    printExitMessage($"Ошибка: {ex.ParamName}");
                 }
-                catch (MeetingCrossingException ex)
+                catch(MeetingCrossingException ex)
                 {
                     printExitMessage($"Ошибка: {ex.Message}");
                 }
@@ -139,6 +142,7 @@ namespace PersonalMeetingsManager
             Console.WriteLine($"\n{message}");
             Console.WriteLine("Нажмите любую клавишу для возврата в главное меню.");
             Console.ReadKey();
+            Console.Clear();
         }
 
         /// <summary>
@@ -148,6 +152,7 @@ namespace PersonalMeetingsManager
         {
             Console.WriteLine("Нажмите любую клавишу для возврата в главное меню.");
             Console.ReadKey();
+            Console.Clear();
         }
 
         /// <summary>

@@ -10,6 +10,12 @@ namespace PersonalMeetingsManager.Utilities
 
     public class MeetingCrossingException : ArgumentException
     {
+        public MeetingCrossingException(string message)
+            : base(message)
+        {
+
+        }
+
         public MeetingCrossingException(string message, string paramName)
             : base(message, paramName)
         {
@@ -19,6 +25,12 @@ namespace PersonalMeetingsManager.Utilities
 
     public class TimeErrorException : ArgumentException
     {
+        public TimeErrorException(string message)
+            : base(message)
+        {
+
+        }
+
         public TimeErrorException(string message, string paramName)
             : base(message, paramName)
         {
