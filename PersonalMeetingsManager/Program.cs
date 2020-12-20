@@ -143,7 +143,6 @@ namespace PersonalMeetingsManager
             Console.WriteLine($"\n{message}");
             Console.WriteLine("Нажмите любую клавишу для продолжения.");
             Console.ReadKey();
-            //Console.Clear();
         }
 
         /// <summary>
@@ -153,11 +152,10 @@ namespace PersonalMeetingsManager
         {
             Console.WriteLine("\nНажмите любую клавишу для продолжения.");
             Console.ReadKey();
-            Console.Clear();
         }
 
         /// <summary>
-        /// Выводит предложение возврата в меню.
+        /// Выводит предложение напоминание о встрече.
         /// </summary>
         private static void DisplayTimer(string message)
         {
@@ -199,11 +197,10 @@ namespace PersonalMeetingsManager
         /// <returns></returns>
         private static int EnterIndex(string action)
         {
-            int index;
             while (true)
             {
                 Console.WriteLine($"Введите номер встречи, которую вы хотели бы {action}:");
-                if (int.TryParse(Console.ReadLine(), out index))
+                if (int.TryParse(Console.ReadLine(), out int index))
                 {
                     return index;
                 }
@@ -320,11 +317,11 @@ namespace PersonalMeetingsManager
                                         select meeting;
 
             if (meetings.Count == 0)
-                Console.WriteLine($"Сейчас в Вашем расписании нет ни одной встречи, запланированной на {userInputDate.ToString("D")}");
+                Console.WriteLine($"Сейчас в Вашем расписании нет ни одной встречи, запланированной на {userInputDate:D}");
             else
             {
                 int counter = 1;
-                Console.WriteLine($"Встречи, запланированные на {userInputDate.ToString("D")}:\n");
+                Console.WriteLine($"Встречи, запланированные на {userInputDate:D}:\n");
                 foreach (Meeting meeting in userOnDateMeetings)
                 {
                     Console.WriteLine($"Встреча №{counter}");
@@ -340,9 +337,9 @@ namespace PersonalMeetingsManager
         /// <param name="meeting">Переданная встреча.</param>
         private static void ShowSingleMeeting(Meeting meeting)
         {
-            Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime.ToString("t")}");
-            Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime.ToString("t")}");
-            Console.WriteLine($"Время напоминания:\t{meeting.ReminderDateTime.ToString("t")}");
+            Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime:t}");
+            Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime:t}");
+            Console.WriteLine($"Время напоминания:\t{meeting.ReminderDateTime:t}");
             Console.WriteLine();
         }
     }

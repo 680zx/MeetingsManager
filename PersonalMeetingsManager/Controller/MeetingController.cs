@@ -10,8 +10,8 @@ namespace PersonalMeetingsManager
     {
         private static DateTime _nextRemind;
         private static Meeting _nextMeeting;
-        private static List<Meeting> _meetings = new List<Meeting>();
-        private static Timer _timer = new Timer(Remind);
+        private static readonly List<Meeting> _meetings = new List<Meeting>();
+        private static readonly Timer _timer = new Timer(Remind);
 
         public List<Meeting> Meetings { get => _meetings; }        
         public static event MeetingStateHandler Notify;
@@ -122,16 +122,16 @@ namespace PersonalMeetingsManager
                 _timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
             }
 
-            return _nextMeeting != null ? true : false;
+            return _nextMeeting != null;
         }
-        
+
         /// <summary>
         /// Вызывает вывод напоминания о встрече, если определен обработчик события.
         /// </summary>
         /// <param name="state"></param>
         private static void Remind(object state)
         {
-            Timeend?.Invoke($"\aНапоминание о предстоящей встрече {_nextMeeting.StartDateTime.Date.ToString("D")}: \n" +
+            Timeend?.Invoke($"\aНапоминание о предстоящей встрече {_nextMeeting.StartDateTime.Date:D}: \n" +
                            $"Начало:\t\t{_nextMeeting.StartDateTime}\n" +
                            $"Окончание:\t{_nextMeeting.EndDateTime}");
             SetNextReminderDateTime();
