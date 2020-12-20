@@ -126,7 +126,7 @@ namespace PersonalMeetingsManager
         }
 
         /// <summary>
-        /// Вызывает вывод напоминания о встрече, если определен обработчик события.
+        /// Вызывает напоминание о встрече, если определен обработчик события.
         /// </summary>
         /// <param name="state"></param>
         private static void Remind(object state)

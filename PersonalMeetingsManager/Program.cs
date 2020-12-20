@@ -49,7 +49,7 @@ namespace PersonalMeetingsManager
                             ShowMeetings(meetingController.Meetings);
                             if (meetingController.Meetings.Count != 0)
                             {
-                                var removeIndex = EnterIndex("удалить") - 1;
+                                var removeIndex = EnterIndex("удалить");
                                 meetingController.RemoveMeeting(removeIndex);
                             }
                             else DisplayExitMessage();
@@ -60,7 +60,7 @@ namespace PersonalMeetingsManager
                             ShowMeetings(meetingController.Meetings);
                             if (meetingController.Meetings.Count != 0)
                             {
-                                var editIndex = EnterIndex("отредактировать") - 1;
+                                var editIndex = EnterIndex("отредактировать");
                                 var changedMeeting = EnterMeeting();
                                 meetingController.EditMeeting(editIndex, changedMeeting);
                             }
@@ -72,7 +72,7 @@ namespace PersonalMeetingsManager
                             ShowMeetings(meetingController.Meetings);
                             if (meetingController.Meetings.Count != 0)
                             {
-                                var reminderTimeIndex = EnterIndex("изменить время напоминания") - 1;
+                                var reminderTimeIndex = EnterIndex("изменить время напоминания");
                                 var changedReminderTime = EnterTime();
                                 meetingController.EditReminderTime(reminderTimeIndex, changedReminderTime);
                             }
@@ -105,7 +105,6 @@ namespace PersonalMeetingsManager
                             Console.WriteLine("до начала встречи, введите 00:15.");
                             Console.WriteLine("  Текстовый файл со встречами за определенный");
                             Console.WriteLine(" день находится в папке MyMeetings. ");
-                            
                             DisplayExitMessage();
                             break;
 
@@ -130,7 +129,6 @@ namespace PersonalMeetingsManager
                 Console.Clear();
             }
         }
-        //20.12.2020 00:20
 
         /// <summary>
         /// Выводит сообщение об успешном выполнении действии пользоватаеля.
@@ -179,10 +177,12 @@ namespace PersonalMeetingsManager
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
+                    Console.Clear();
                     Console.WriteLine($"Ошибка: {ex.ParamName}\n");
                 }
                 catch (TimeErrorException ex)
                 {
+                    Console.Clear();
                     Console.WriteLine($"Ошибка: {ex.Message}\n");
                 }
             }
@@ -200,7 +200,7 @@ namespace PersonalMeetingsManager
                 Console.WriteLine($"Введите номер встречи, которую вы хотели бы {action}:");
                 if (int.TryParse(Console.ReadLine(), out int index))
                 {
-                    return index;
+                    return index - 1;
                 }
                 else
                 {
@@ -219,7 +219,7 @@ namespace PersonalMeetingsManager
             DateTime dateTime;
             while (true)
             {
-                Console.WriteLine($"Введите дату и время {meetingStage} в формате (dd.MM.yyyy HH:mm)");
+                Console.WriteLine($"Введите дату и время {meetingStage} в формате (dd.MM.yyyy HH:mm):");
                 if (DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy HH:mm", null, DateTimeStyles.None, out dateTime))
                 {
                     break;
@@ -242,7 +242,7 @@ namespace PersonalMeetingsManager
             DateTime dateTime;
             while (true)
             {
-                Console.WriteLine($"Введите дату {meetingStage} в формате (dd.MM.yyyy)");
+                Console.WriteLine($"Введите дату {meetingStage} в формате (dd.MM.yyyy):");
                 if (DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy", null, DateTimeStyles.None, out dateTime))
                 {
                     break;
