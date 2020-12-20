@@ -19,6 +19,7 @@ namespace PersonalMeetingsManager
         {
             MeetingController meetingController = new MeetingController();
             MeetingController.Notify += displayExitMessage;
+            MeetingController.Timeend += displayTimer;
 
             while (true)
             {
@@ -115,19 +116,19 @@ namespace PersonalMeetingsManager
                             break;
                     }
                 }
-                catch(ArgumentNullException ex)
+                catch (ArgumentNullException ex)
                 {
                     displayExitMessage($"Ошибка: {ex.Message}");
                 }
-                catch(ArgumentOutOfRangeException ex)
+                catch (ArgumentOutOfRangeException ex)
                 {
                     displayExitMessage($"Ошибка: {ex.Message}");
                 }
-                catch(MeetingCrossingException ex)
+                catch (MeetingCrossingException ex)
                 {
                     displayExitMessage($"Ошибка: {ex.Message}");
                 }
-                catch(TimeErrorException ex)
+                catch (TimeErrorException ex)
                 {
                     displayExitMessage($"Ошибка: {ex.Message}");
                 }
@@ -142,8 +143,14 @@ namespace PersonalMeetingsManager
         /// <param name="action">Тип действия.</param>
         private static void displayExitMessage(string message)
         {
+            if (message is null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
+            Console.Clear();
             Console.WriteLine($"\n{message}");
-            Console.WriteLine("Нажмите любую клавишу для возврата в главное меню.");
+            Console.WriteLine("Нажмите любую клавишу для продолжения.");
             Console.ReadKey();
             //Console.Clear();
         }
@@ -153,9 +160,20 @@ namespace PersonalMeetingsManager
         /// </summary>
         private static void displayExitMessage()
         {
-            Console.WriteLine("\nНажмите любую клавишу для возврата в главное меню.");
+            Console.WriteLine("\nНажмите любую клавишу для продолжения.");
             Console.ReadKey();
             Console.Clear();
+        }
+
+        /// <summary>
+        /// Выводит предложение возврата в меню.
+        /// </summary>
+        private static void displayTimer(string message)
+        {
+            Console.Clear();
+            Console.WriteLine(message);
+            Console.WriteLine("\nНажмите любую клавишу для продолжения.");
+            Console.ReadKey();
         }
 
         /// <summary>
