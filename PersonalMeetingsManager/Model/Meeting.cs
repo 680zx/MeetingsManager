@@ -5,33 +5,33 @@ namespace PersonalMeetingsManager
 {
     public class Meeting : ICloneable
     {
-        private DateTime _startDateTime;
-        private DateTime _endDateTime;
-        private DateTime _reminderDateTime;
+        private DateTime _start;
+        private DateTime _end;
+        private DateTime _reminder;
 
         public DateTime StartDateTime 
         { 
-            get => _startDateTime;
+            get => _start;
             set
             {
-                _startDateTime = value;
+                _start = value;
             }
         }
         public DateTime EndDateTime 
         {
-            get => _endDateTime;
+            get => _end;
             set
             {
-                _endDateTime = value;
+                _end = value;
             }
         }
     
         public DateTime ReminderDateTime 
         { 
-            get => _reminderDateTime; 
+            get => _reminder; 
             set
             {
-                _reminderDateTime = value;
+                _reminder = value;
             }
         }
 
@@ -48,18 +48,18 @@ namespace PersonalMeetingsManager
             if (reminderTime.TotalMinutes < 0)
                 throw new TimeErrorException("Невозможно установить время напоминание о встрече позже времени ее начала.");
 
-            _startDateTime = startDateTime;
-            _endDateTime = endDateTime;
-            _reminderDateTime = startDateTime.Subtract(reminderTime);
+            _start = startDateTime;
+            _end = endDateTime;
+            _reminder = startDateTime.Subtract(reminderTime);
         }
 
         public object Clone()
         {
             return new Meeting
             {
-                _startDateTime = this._startDateTime,
-                _endDateTime = this._endDateTime,
-                _reminderDateTime = this._reminderDateTime
+                _start = this._start,
+                _end = this._end,
+                _reminder = this._reminder
             };
         }
     }

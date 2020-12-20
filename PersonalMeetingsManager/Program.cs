@@ -18,7 +18,7 @@ namespace PersonalMeetingsManager
         static void Main(string[] args)
         {
             MeetingController meetingController = new MeetingController();
-            meetingController.Notify += displayExitMessage;
+            MeetingController.Notify += displayExitMessage;
 
             while (true)
             {
@@ -130,6 +130,7 @@ namespace PersonalMeetingsManager
                 {
                     displayExitMessage($"Ошибка: {ex.Message}");
                 }
+                Console.Clear();
             }
         }
         //01.01.2021 08:50
