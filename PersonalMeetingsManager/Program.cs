@@ -9,8 +9,6 @@ namespace PersonalMeetingsManager
 {
     class Program
     {
-        // TODO: добавить Enum заместо string в методах enterIndex("удалить");enterIndex("отредактировать");enterDate("для просмотра");
-        // TODO: добавить возможность выхода из меню редактирования, удаления и т.д.
         /// <summary>
         /// Интерфейс и главный цикл программы.
         /// </summary>
@@ -18,8 +16,8 @@ namespace PersonalMeetingsManager
         static void Main(string[] args)
         {
             MeetingController meetingController = new MeetingController();
-            MeetingController.Notify += displayExitMessage;
-            MeetingController.Timeend += displayTimer;
+            MeetingController.Notify += DisplayExitMessage;
+            MeetingController.Timeend += DisplayTimer;
 
             while (true)
             {
@@ -42,57 +40,57 @@ namespace PersonalMeetingsManager
                     {
                         case ConsoleKey.N:
                             Console.Clear();
-                            var newMeeting = enterMeeting();
+                            var newMeeting = EnterMeeting();
                             meetingController.AddMeeting(newMeeting);
                             break;
 
                         case ConsoleKey.R:
                             Console.Clear();
-                            showMeetings(meetingController.Meetings);
+                            ShowMeetings(meetingController.Meetings);
                             if (meetingController.Meetings.Count != 0)
                             {
-                                var removeIndex = enterIndex("удалить") - 1;
+                                var removeIndex = EnterIndex("удалить") - 1;
                                 meetingController.RemoveMeeting(removeIndex);
                             }
-                            else displayExitMessage();
+                            else DisplayExitMessage();
                             break;
 
                         case ConsoleKey.E:
                             Console.Clear();
-                            showMeetings(meetingController.Meetings);
+                            ShowMeetings(meetingController.Meetings);
                             if (meetingController.Meetings.Count != 0)
                             {
-                                var editIndex = enterIndex("отредактировать") - 1;
-                                var changedMeeting = enterMeeting();
+                                var editIndex = EnterIndex("отредактировать") - 1;
+                                var changedMeeting = EnterMeeting();
                                 meetingController.EditMeeting(editIndex, changedMeeting);
                             }
-                            else displayExitMessage();
+                            else DisplayExitMessage();
                             break;
 
                         case ConsoleKey.C:
                             Console.Clear();
-                            showMeetings(meetingController.Meetings);
+                            ShowMeetings(meetingController.Meetings);
                             if (meetingController.Meetings.Count != 0)
                             {
-                                var reminderTimeIndex = enterIndex("изменить время напоминания") - 1;
-                                var changedReminderTime = enterTime();
+                                var reminderTimeIndex = EnterIndex("изменить время напоминания") - 1;
+                                var changedReminderTime = EnterTime();
                                 meetingController.EditReminderTime(reminderTimeIndex, changedReminderTime);
                             }
-                            else displayExitMessage();
+                            else DisplayExitMessage();
                             break;
 
                         case ConsoleKey.S:
                             Console.Clear();
-                            var userIntputDate = enterDate("для просмотра");
-                            showMeetings(meetingController.Meetings, userIntputDate);
-                            displayExitMessage();
+                            var userIntputDate = EnterDate("для просмотра");
+                            ShowMeetings(meetingController.Meetings, userIntputDate);
+                            DisplayExitMessage();
                             break;
 
                         case ConsoleKey.P:
                             Console.Clear();
-                            var userIntputDateTxt = enterDate("для записи в файл");
+                            var userIntputDateTxt = EnterDate("для записи в файл");
                             TxtSaver.Save(meetingController.Meetings, userIntputDateTxt);
-                            displayExitMessage("Экспорт встреч в текстовый файл успешно выполнен.");
+                            DisplayExitMessage("Экспорт встреч в текстовый файл успешно выполнен.");
                             break;
 
                         case ConsoleKey.H:
@@ -103,7 +101,7 @@ namespace PersonalMeetingsManager
                             Console.WriteLine("2012 года будет введена как 12.07.2012 08:05.");
                             Console.WriteLine("Текстовый файл со встречами за определенный день");
                             Console.WriteLine("находится в директории Meetings проекта MyMeetings");
-                            displayExitMessage();
+                            DisplayExitMessage();
                             break;
 
                         case ConsoleKey.Q:
@@ -118,37 +116,30 @@ namespace PersonalMeetingsManager
                 }
                 catch (ArgumentNullException ex)
                 {
-                    displayExitMessage($"Ошибка: {ex.Message}");
+                    DisplayExitMessage($"Ошибка: {ex.Message}");
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
-                    displayExitMessage($"Ошибка: {ex.Message}");
+                    DisplayExitMessage($"Ошибка: {ex.Message}");
                 }
                 catch (MeetingCrossingException ex)
                 {
-                    displayExitMessage($"Ошибка: {ex.Message}");
+                    DisplayExitMessage($"Ошибка: {ex.Message}");
                 }
                 catch (TimeErrorException ex)
                 {
-                    displayExitMessage($"Ошибка: {ex.Message}");
+                    DisplayExitMessage($"Ошибка: {ex.Message}");
                 }
                 Console.Clear();
             }
         }
-        //01.01.2021 08:50
 
         /// <summary>
         /// Выводит сообщение об успешном выполнении действии пользоватаеля.
         /// </summary>
         /// <param name="action">Тип действия.</param>
-        private static void displayExitMessage(string message)
+        private static void DisplayExitMessage(string message)
         {
-            if (message is null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            Console.Clear();
             Console.WriteLine($"\n{message}");
             Console.WriteLine("Нажмите любую клавишу для продолжения.");
             Console.ReadKey();
@@ -158,7 +149,7 @@ namespace PersonalMeetingsManager
         /// <summary>
         /// Выводит предложение возврата в меню.
         /// </summary>
-        private static void displayExitMessage()
+        private static void DisplayExitMessage()
         {
             Console.WriteLine("\nНажмите любую клавишу для продолжения.");
             Console.ReadKey();
@@ -168,27 +159,26 @@ namespace PersonalMeetingsManager
         /// <summary>
         /// Выводит предложение возврата в меню.
         /// </summary>
-        private static void displayTimer(string message)
+        private static void DisplayTimer(string message)
         {
             Console.Clear();
             Console.WriteLine(message);
             Console.WriteLine("\nНажмите любую клавишу для продолжения.");
-            Console.ReadKey();
         }
 
         /// <summary>
         /// Создает новую встречу.
         /// </summary>
         /// <returns>Возвращает новую встречу.</returns>
-        private static Meeting enterMeeting()
+        private static Meeting EnterMeeting()
         {
             while (true)
             {
                 try
                 {
-                    var startDateTime = enterDateTime("начала предстоящей встречи");
-                    var endDateTime = enterDateTime("окончания предстоящей встречи");
-                    var reminderTime = enterTime();
+                    var startDateTime = EnterDateTime("начала предстоящей встречи");
+                    var endDateTime = EnterDateTime("окончания предстоящей встречи");
+                    var reminderTime = EnterTime();
                     return new Meeting(startDateTime, endDateTime, reminderTime);
                 }
                 catch (ArgumentOutOfRangeException ex)
@@ -207,7 +197,7 @@ namespace PersonalMeetingsManager
         /// </summary>
         /// <param name="action">Тип действия.</param>
         /// <returns></returns>
-        private static int enterIndex(string action)
+        private static int EnterIndex(string action)
         {
             int index;
             while (true)
@@ -229,7 +219,7 @@ namespace PersonalMeetingsManager
         /// </summary>
         /// <param name="meetingStage">Строка, указывающая на тип вводимого пользователем этапа встречи.</param>
         /// <returns>Возвращает дату и время начала/окончания.</returns>
-        private static DateTime enterDateTime(string meetingStage)
+        private static DateTime EnterDateTime(string meetingStage)
         {
             DateTime dateTime;
             while (true)
@@ -252,7 +242,7 @@ namespace PersonalMeetingsManager
         /// </summary>
         /// <param name="meetingStage">Строка, указывающая на тип вводимого пользователем этапа встречи.</param>
         /// <returns>Возвращает введенную пользователем дату.</returns>
-        private static DateTime enterDate(string meetingStage)
+        private static DateTime EnterDate(string meetingStage)
         {
             DateTime dateTime;
             while (true)
@@ -274,7 +264,7 @@ namespace PersonalMeetingsManager
         /// Запрашивает у пользователя интервал времени до начала встречи.
         /// </summary>
         /// <returns>Возвращает интервал времени до начала встречи.</returns>
-        private static TimeSpan enterTime()
+        private static TimeSpan EnterTime()
         {
             TimeSpan timeSpan;
             while (true)
@@ -296,7 +286,7 @@ namespace PersonalMeetingsManager
         /// Выводит список всех встреч пользователя <see cref="meetings">.
         /// </summary>
         /// <param name="meetings">Список встреч.</param>
-        private static void showMeetings(List<Meeting> meetings)
+        private static void ShowMeetings(List<Meeting> meetings)
         {
             if (meetings == null)
                 throw new ArgumentNullException("Список встреч не может быть null.", nameof(meetings));
@@ -309,7 +299,7 @@ namespace PersonalMeetingsManager
                 foreach (Meeting meeting in meetings)
                 {
                     Console.WriteLine($"Встреча №{counter}");
-                    showSingleMeeting(meeting);
+                    ShowSingleMeeting(meeting);
                     counter++;
                 }
             }
@@ -320,7 +310,7 @@ namespace PersonalMeetingsManager
         /// </summary>
         /// <param name="meetings">Список встреч.</param>
         /// <param name="userInputDate">Выбранная дата.</param>
-        private static void showMeetings(List<Meeting> meetings, DateTime userInputDate)
+        private static void ShowMeetings(List<Meeting> meetings, DateTime userInputDate)
         {
             if (meetings == null)
                 throw new ArgumentNullException("Список встреч не может быть null.", nameof(meetings));
@@ -338,7 +328,7 @@ namespace PersonalMeetingsManager
                 foreach (Meeting meeting in userOnDateMeetings)
                 {
                     Console.WriteLine($"Встреча №{counter}");
-                    showSingleMeeting(meeting);
+                    ShowSingleMeeting(meeting);
                     counter++;
                 }
             }
@@ -348,7 +338,7 @@ namespace PersonalMeetingsManager
         /// Выводит данные(время начала/окончания/напоминания) встречи.
         /// </summary>
         /// <param name="meeting">Переданная встреча.</param>
-        private static void showSingleMeeting(Meeting meeting)
+        private static void ShowSingleMeeting(Meeting meeting)
         {
             Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime.ToString("t")}");
             Console.WriteLine($"Окончание:\t\t{meeting.EndDateTime.ToString("t")}");

@@ -4,10 +4,6 @@ using System.Text;
 
 namespace PersonalMeetingsManager.Utilities
 {
-    class Exceptions
-    {
-    }
-
     public class MeetingCrossingException : ArgumentException
     {
         public MeetingCrossingException(string message) : base(message) { }

@@ -8,18 +8,14 @@ namespace PersonalMeetingsManager
     public delegate void MeetingStateHandler(string message);
     public class MeetingController
     {
-        private List<Meeting> _meetings = new List<Meeting>();
         private static DateTime _nextRemind;
         private static Meeting _nextMeeting;
-        private Timer _timer = new Timer(Remind);
+        private static List<Meeting> _meetings = new List<Meeting>();
+        private static Timer _timer = new Timer(Remind);
 
         public List<Meeting> Meetings { get => _meetings; }        
         public static event MeetingStateHandler Notify;
         public static event MeetingStateHandler Timeend;
-
-        public MeetingController()
-        {
-        }
 
         /// <summary>
         /// Добавляет <see cref="newMeeting"/> в список встреч.
@@ -38,12 +34,12 @@ namespace PersonalMeetingsManager
                     throw new MeetingCrossingException("Невозможно добавить новую встречу - пересечение с уже существующей встречей.");
                 }
             }
+
             _meetings.Add(newMeeting);
             Notify?.Invoke("Добавлена новая встреча.");
-            if (setNextReminderDateTime())
-                _timer.Change(_nextRemind.Subtract(DateTime.Now), Timeout.InfiniteTimeSpan);
-            else
-                Notify?.Invoke("Внимание! Напоминание о встрече не сработает, время устанволено на прошедшую дату.");
+
+            if (!SetNextReminderDateTime())
+                Notify?.Invoke("Внимание! Напоминание о встрече не сработает, время напоминания установлено на прошедшую дату.");
         }
 
         /// <summary>
@@ -57,8 +53,8 @@ namespace PersonalMeetingsManager
 
             _meetings.RemoveAt(index);
             Notify?.Invoke("Встреча удалена из списка.");
-            if (setNextReminderDateTime())
-                _timer.Change(_nextRemind.Subtract(DateTime.Now), Timeout.InfiniteTimeSpan);
+
+            SetNextReminderDateTime();
         }
 
         /// <summary>
@@ -75,8 +71,9 @@ namespace PersonalMeetingsManager
 
             _meetings[index] = changedMeeting.Clone() as Meeting;
             Notify?.Invoke("Данные встречи изменены.");
-            if (setNextReminderDateTime())
-                _timer.Change(_nextRemind.Subtract(DateTime.Now), Timeout.InfiniteTimeSpan);
+
+            if (!SetNextReminderDateTime())
+                Notify?.Invoke("Внимание! Напоминание о встрече не сработает, время напоминания установлено на прошедшую дату.");
         }
 
         /// <summary>
@@ -94,11 +91,16 @@ namespace PersonalMeetingsManager
             var currentMeeting = _meetings[index];
             currentMeeting.ReminderDateTime = currentMeeting.StartDateTime.Subtract(changedTimeSpan);
             Notify?.Invoke("Время напоминания о встрече изменено.");
-            if (setNextReminderDateTime())
-                _timer.Change(_nextRemind.Subtract(DateTime.Now), Timeout.InfiniteTimeSpan);
+
+            if (!SetNextReminderDateTime())
+                Notify?.Invoke("Внимание! Напоминание о встрече не сработает, время напоминания установлено на прошедшую дату.");
         }
         
-        private bool setNextReminderDateTime()
+        /// <summary>
+        /// Выполняет поиск встречи с ближайшим временем напоминания.
+        /// </summary>
+        /// <returns>Возвращает true, если встреча найдена, иначе false.</returns>
+        private static bool SetNextReminderDateTime()
         {
             _nextRemind = DateTime.MaxValue;
             _nextMeeting = null;
@@ -111,17 +113,28 @@ namespace PersonalMeetingsManager
                 }
             }
 
-            return _nextMeeting != null ? true : false;
-            //_nextRemind = _meetings[0].ReminderDateTime;
-            //_nextMeeting = _meetings[0];
-        }
+            try
+            {
+                _timer.Change(_nextRemind.Subtract(DateTime.Now), Timeout.InfiniteTimeSpan);
+            }
+            catch (Exception)
+            {
+                _timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+            }
 
+            return _nextMeeting != null ? true : false;
+        }
+        
+        /// <summary>
+        /// Вызывает вывод напоминания о встрече, если определен обработчик события.
+        /// </summary>
+        /// <param name="state"></param>
         private static void Remind(object state)
         {
             Timeend?.Invoke($"\aНапоминание о предстоящей встрече {_nextMeeting.StartDateTime.Date.ToString("D")}: \n" +
-                           $"Начало:\t{_nextMeeting.StartDateTime}\n" +
+                           $"Начало:\t\t{_nextMeeting.StartDateTime}\n" +
                            $"Окончание:\t{_nextMeeting.EndDateTime}");
+            SetNextReminderDateTime();
         }
-
     }
 }

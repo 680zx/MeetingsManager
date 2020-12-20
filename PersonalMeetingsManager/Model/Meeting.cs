@@ -12,23 +12,14 @@ namespace PersonalMeetingsManager
         public DateTime StartDateTime 
         { 
             get => _start;
-            set
-            {
-                _start = value;
-            }
         }
         public DateTime EndDateTime 
         {
             get => _end;
-            set
-            {
-                _end = value;
-            }
         }
-    
         public DateTime ReminderDateTime 
         { 
-            get => _reminder; 
+            get => _reminder;
             set
             {
                 _reminder = value;
