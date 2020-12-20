@@ -22,7 +22,8 @@ namespace PersonalMeetingsManager
 
             while (true)
             {
-                Console.WriteLine("\tMeetings Manager\n");
+                Console.WriteLine("\t\tMeetings Manager");
+                Console.WriteLine("\tПеред использованием прочтите справку\n");
                 Console.WriteLine("Выберите действие:");
                 Console.WriteLine("N - добавить новую встречу");
                 Console.WriteLine("R - удалить встречу из списка");
@@ -99,9 +100,9 @@ namespace PersonalMeetingsManager
                             Console.WriteLine("приложение использует 24-х часовой формат времени.");
                             Console.WriteLine("К примеру, дата 8 часов утра 5 минут 12 июля");
                             Console.WriteLine("2012 года будет введена как 12.07.2012 08:05.");
-                            Console.WriteLine("Текстовый файл со встречами за опреденный день");
+                            Console.WriteLine("Текстовый файл со встречами за определенный день");
                             Console.WriteLine("находится в директории Meetings проекта MyMeetings");
-                            displayExitMessage("Вывод справки успешно выполнен");
+                            displayExitMessage();
                             break;
 
                         case ConsoleKey.Q:
@@ -144,7 +145,7 @@ namespace PersonalMeetingsManager
             Console.WriteLine($"\n{message}");
             Console.WriteLine("Нажмите любую клавишу для возврата в главное меню.");
             Console.ReadKey();
-            Console.Clear();
+            //Console.Clear();
         }
 
         /// <summary>
@@ -152,7 +153,7 @@ namespace PersonalMeetingsManager
         /// </summary>
         private static void displayExitMessage()
         {
-            Console.WriteLine("Нажмите любую клавишу для возврата в главное меню.");
+            Console.WriteLine("\nНажмите любую клавишу для возврата в главное меню.");
             Console.ReadKey();
             Console.Clear();
         }
@@ -184,7 +185,7 @@ namespace PersonalMeetingsManager
         }
 
         /// <summary>
-        /// Запрашивает у пользователя индекс встречи для изменения/удаления.
+        /// Запрашивает у пользователя индекс.
         /// </summary>
         /// <param name="action">Тип действия.</param>
         /// <returns></returns>
@@ -229,9 +230,9 @@ namespace PersonalMeetingsManager
         }
 
         /// <summary>
-        /// Запрашивает у пользователя дату.
+        /// Запрашивает у пользователя дату для <see cref="meetingStage"/>.
         /// </summary>
-        /// <param name="meetingStage">Этап встречи.</param>
+        /// <param name="meetingStage">Строка, указывающая на тип вводимого пользователем этапа встречи.</param>
         /// <returns>Возвращает введенную пользователем дату.</returns>
         private static DateTime enterDate(string meetingStage)
         {
@@ -325,14 +326,10 @@ namespace PersonalMeetingsManager
             }
         }
 
-        private static void showMeetingNotification(object meeting)
-        {
-            Console.Clear();
-            Console.WriteLine("\tНапоминание о предстоящей встрече");
-            showSingleMeeting(meeting as Meeting);
-            displayExitMessage();
-        }
-
+        /// <summary>
+        /// Выводит данные(время начала/окончания/напоминания) встречи.
+        /// </summary>
+        /// <param name="meeting">Переданная встреча.</param>
         private static void showSingleMeeting(Meeting meeting)
         {
             Console.WriteLine($"Начало:\t\t\t{meeting.StartDateTime.ToString("t")}");

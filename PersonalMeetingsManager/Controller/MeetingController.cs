@@ -11,16 +11,11 @@ namespace PersonalMeetingsManager
         private List<Meeting> _meetings = new List<Meeting>();
         private static DateTime _nextRemind;
         private static Meeting _nextMeeting;
-        public Timer _timer = new Timer(Remind);
+        private Timer _timer = new Timer(Remind);
 
-        public List<Meeting> Meetings { get => _meetings; }
-        //public DateTime NextReminderDateTime { get => _nextRemind; }
-        //public Meeting NextMeeting { get => _nextMeeting; }
-        
+        public List<Meeting> Meetings { get => _meetings; }        
         public static event MeetingStateHandler Notify;
         
-
-        // TODO: добавить напоминание о встрече
         public MeetingController()
         {
         }
@@ -100,24 +95,27 @@ namespace PersonalMeetingsManager
             _timer.Change(_nextRemind.Subtract(DateTime.Now), Timeout.InfiniteTimeSpan);
         }
         
-        private void setNextReminderDateTime()
+        private bool setNextReminderDateTime()
         {
             _nextRemind = DateTime.MaxValue;
-            //for (int i = 0; i < _meetings.Count; i++)
-            //{
-            //    if (_meetings[i].ReminderDateTime > DateTime.Now && _meetings[i].ReminderDateTime < _nextRemind)
-            //    {
-            //        _nextRemind = _meetings[i].ReminderDateTime;
-            //        _nextMeeting = _meetings[i];
-            //    }
-            //}
-            _nextRemind = _meetings[0].ReminderDateTime;
-            _nextMeeting = _meetings[0];
+            _nextMeeting = null;
+            for (int i = 0; i < _meetings.Count; i++)
+            {
+                if (_meetings[i].ReminderDateTime > DateTime.Now && _meetings[i].ReminderDateTime < _nextRemind)
+                {
+                    _nextRemind = _meetings[i].ReminderDateTime;
+                    _nextMeeting = _meetings[i];
+                }
+            }
+
+            return _nextMeeting != null ? true : false;
+            //_nextRemind = _meetings[0].ReminderDateTime;
+            //_nextMeeting = _meetings[0];
         }
 
         private static void Remind(object state)
         {
-            Notify?.Invoke("Reminder: \n" +
+            Notify?.Invoke($"\aНапоминание о предстоящей встрече {_nextMeeting.StartDateTime.Date.ToString("D")}: \n" +
                            $"start:\t{_nextMeeting.StartDateTime}\n" +
                            $"remind:\t{_nextMeeting.EndDateTime}");
         }
