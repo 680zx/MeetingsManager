@@ -5,6 +5,7 @@ using System.Threading;
 
 namespace PersonalMeetingsManager
 {
+    public delegate void MeetingStateHandler(string message);
     public class MeetingController
     {
         private List<Meeting> _meetings = new List<Meeting>();
@@ -13,6 +14,7 @@ namespace PersonalMeetingsManager
         public List<Meeting> Meetings { get => _meetings; }
         public DateTime NextReminderDateTime { get => _nextReminderDateTime; }
         public Meeting NextMeeting { get => _nextMeeting; }
+        public event MeetingStateHandler Notify;
         
 
         // TODO: добавить напоминание о встрече
@@ -38,7 +40,7 @@ namespace PersonalMeetingsManager
                 }
             }
             _meetings.Add(newMeeting);
-            setNextReminderDateTime();
+            Notify?.Invoke("Добавлена новая встреча.");
         }
 
         /// <summary>
@@ -48,10 +50,10 @@ namespace PersonalMeetingsManager
         public void RemoveMeeting(int index)
         {
             if (index >= _meetings.Count || index < 0)
-                throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка", nameof(index));
+                throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка");
 
             _meetings.RemoveAt(index);
-            setNextReminderDateTime();
+            Notify?.Invoke("Встреча удалена из списка.");
         }
 
         /// <summary>
@@ -64,10 +66,10 @@ namespace PersonalMeetingsManager
             if (changedMeeting == null)
                 throw new ArgumentNullException("Передан null в качестве параметра.", nameof(changedMeeting));
             if (index >= _meetings.Count || index < 0)
-                throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка.", nameof(index));
+                throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка.");
 
             _meetings[index] = changedMeeting.Clone() as Meeting;
-            setNextReminderDateTime();
+            Notify?.Invoke("Данные встречи изменены.");
         }
 
         /// <summary>
@@ -75,18 +77,16 @@ namespace PersonalMeetingsManager
         /// </summary>
         /// <param name="index">Индекс изменяемой встречи.</param>
         /// <param name="dateTime">Новое время напоминания.</param>
-        public void ChangeReminderTime(int index, TimeSpan changedTimeSpan)
+        public void EditReminderTime(int index, TimeSpan changedTimeSpan)
         {
-            if (changedTimeSpan == null)
-                throw new ArgumentNullException("Передан null в качестве параметра.", nameof(changedTimeSpan));
             if (index >= _meetings.Count || index < 0)
-                throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка", nameof(index));
+                throw new ArgumentOutOfRangeException("Переданный индекс встречи находится вне границ списка");
             if (changedTimeSpan.TotalMinutes < 0)
                 throw new TimeErrorException("Невозможно установить время напоминание о встрече позже времени ее начала.");
 
             var currentMeeting = _meetings[index];
             currentMeeting.ReminderDateTime = currentMeeting.StartDateTime.Subtract(changedTimeSpan);
-            setNextReminderDateTime();
+            Notify?.Invoke("Время напоминания о встрече изменено.");
         }
         
         private void setNextReminderDateTime()

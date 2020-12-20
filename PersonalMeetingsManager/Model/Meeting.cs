@@ -42,9 +42,9 @@ namespace PersonalMeetingsManager
         public Meeting(DateTime startDateTime, DateTime endDateTime, TimeSpan reminderTime)
         {
             if (startDateTime < DateTime.Now)
-                throw new ArgumentOutOfRangeException("Время встречи может быть установлено только на будущее.", nameof(startDateTime));
+                throw new ArgumentOutOfRangeException("Время встречи может быть установлено только на будущее.");
             if (startDateTime >= endDateTime)
-                throw new ArgumentOutOfRangeException("Время начала встречи не может быть больше времени окончания.", nameof(endDateTime));
+                throw new ArgumentOutOfRangeException("Время начала встречи не может быть больше времени окончания.");
             if (reminderTime.TotalMinutes < 0)
                 throw new TimeErrorException("Невозможно установить время напоминание о встрече позже времени ее начала.");
 
