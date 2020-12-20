@@ -17,4 +17,11 @@ namespace PersonalMeetingsManager.Utilities
         public TimeErrorException(string message, string paramName) : base(message, paramName) { }
         public TimeErrorException(string message, Exception inner) : base(message, inner) { }
     }         
+
+    public class SettingDateTimeException : ArgumentOutOfRangeException
+    {
+        public SettingDateTimeException(string message) : base(message) { }
+        public SettingDateTimeException(string message, string paramName) : base(message, paramName) { }
+        public SettingDateTimeException(string message, Exception inner) : base(message, inner) { }
+    }
 }

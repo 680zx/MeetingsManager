@@ -16,9 +16,9 @@ namespace PersonalMeetingsManager.Utilities
             if (meetings == null)
                 throw new ArgumentNullException("Передан пустой список", nameof(meetings));
 
-            var userOnDateMeetings = from meeting in meetings
-                                       where meeting.StartDateTime.Date == userInputDate.Date
-                                       select meeting;
+            var userOnDateMeetings = (from meeting in meetings
+                                      where meeting.StartDateTime.Date == userInputDate.Date
+                                      select meeting).ToList();
 
             var pathString = "MyMeetings";
             var fileName = "MyMeetings.txt";
@@ -30,10 +30,10 @@ namespace PersonalMeetingsManager.Utilities
             FileStream fs = null;
             try
             {
-                fs = new FileStream(pathString, FileMode.OpenOrCreate);
+                fs = new FileStream(pathString, FileMode.Create);
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
-                    if (meetings.Count == 0)
+                    if (userOnDateMeetings.Count == 0)
                         sw.WriteLine($"Сейчас в Вашем расписании нет ни одной встречи, запланированной на {userInputDate.ToString("D")}");
                     else
                     {

@@ -95,12 +95,17 @@ namespace PersonalMeetingsManager
 
                         case ConsoleKey.H:
                             Console.Clear();
-                            Console.WriteLine("Формат ввода даты и времени: (dd.MM.yyyy HH:mm),");
+                            Console.WriteLine("\t\tСправка\n");
+                            Console.WriteLine("  Формат ввода даты и времени: (dd.MM.yyyy HH:mm),");
                             Console.WriteLine("приложение использует 24-х часовой формат времени.");
-                            Console.WriteLine("К примеру, дата 8 часов утра 5 минут 12 июля");
-                            Console.WriteLine("2012 года будет введена как 12.07.2012 08:05.");
-                            Console.WriteLine("Текстовый файл со встречами за определенный день");
-                            Console.WriteLine("находится в директории Meetings проекта MyMeetings");
+                            Console.WriteLine("К примеру, дата 0 часов 5 минут ночи 12 июля");
+                            Console.WriteLine("2012 года будет введена как 12.07.2012 00:05,");
+                            Console.WriteLine("время напоминания использует формат (HH:mm),");
+                            Console.WriteLine("для того чтобы приложение напомнило за 15 минут");
+                            Console.WriteLine("до начала встречи, введите 00:15.");
+                            Console.WriteLine("  Текстовый файл со встречами за определенный");
+                            Console.WriteLine(" день находится в папке MyMeetings. ");
+                            
                             DisplayExitMessage();
                             break;
 
@@ -118,21 +123,14 @@ namespace PersonalMeetingsManager
                 {
                     DisplayExitMessage($"Ошибка: {ex.Message}");
                 }
-                catch (ArgumentOutOfRangeException ex)
-                {
-                    DisplayExitMessage($"Ошибка: {ex.Message}");
-                }
                 catch (MeetingCrossingException ex)
-                {
-                    DisplayExitMessage($"Ошибка: {ex.Message}");
-                }
-                catch (TimeErrorException ex)
                 {
                     DisplayExitMessage($"Ошибка: {ex.Message}");
                 }
                 Console.Clear();
             }
         }
+        //20.12.2020 00:20
 
         /// <summary>
         /// Выводит сообщение об успешном выполнении действии пользоватаеля.
@@ -181,7 +179,7 @@ namespace PersonalMeetingsManager
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
-                    Console.WriteLine($"Ошибка: {ex.Message}\n");
+                    Console.WriteLine($"Ошибка: {ex.ParamName}\n");
                 }
                 catch (TimeErrorException ex)
                 {
@@ -312,11 +310,11 @@ namespace PersonalMeetingsManager
             if (meetings == null)
                 throw new ArgumentNullException("Список встреч не может быть null.", nameof(meetings));
 
-            var userOnDateMeetings = from meeting in meetings
-                                        where meeting.StartDateTime.Date == userInputDate.Date
-                                        select meeting;
+            var userOnDateMeetings = (from meeting in meetings
+                                      where meeting.StartDateTime.Date == userInputDate.Date
+                                      select meeting).ToList();
 
-            if (meetings.Count == 0)
+            if (userOnDateMeetings.Count == 0)
                 Console.WriteLine($"Сейчас в Вашем расписании нет ни одной встречи, запланированной на {userInputDate:D}");
             else
             {
