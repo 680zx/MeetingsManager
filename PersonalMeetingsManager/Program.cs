@@ -15,10 +15,10 @@ namespace PersonalMeetingsManager
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            Console.SetWindowSize(100, 30);
             MeetingController meetingController = new MeetingController();
             MeetingController.Notify += DisplayExitMessage;
             MeetingController.Timeend += DisplayTimer;
-            Console.SetWindowSize(100, 30);
 
             while (true)
             {
