@@ -18,6 +18,7 @@ namespace PersonalMeetingsManager
             MeetingController meetingController = new MeetingController();
             MeetingController.Notify += DisplayExitMessage;
             MeetingController.Timeend += DisplayTimer;
+            Console.SetWindowSize(100, 30);
 
             while (true)
             {
@@ -29,7 +30,7 @@ namespace PersonalMeetingsManager
                 Console.WriteLine("E - редактировать встречу из списка");
                 Console.WriteLine("C - изменить напоминание о встрече");
                 Console.WriteLine("S - вывести список встреч на экран");
-                Console.WriteLine("P - экспорт встреч в текстовый файл");
+                Console.WriteLine("X - экспорт встреч в текстовый файл");
                 Console.WriteLine("H - справка");
                 Console.WriteLine("Q - выход");
 
@@ -86,7 +87,7 @@ namespace PersonalMeetingsManager
                             DisplayExitMessage();
                             break;
 
-                        case ConsoleKey.P:
+                        case ConsoleKey.X:
                             Console.Clear();
                             var userIntputDateTxt = EnterDate("для записи в файл");
                             TxtSaver.Save(meetingController.Meetings, userIntputDateTxt);
